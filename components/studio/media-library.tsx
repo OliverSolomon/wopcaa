@@ -35,7 +35,7 @@ export function MediaLibrary({ items }: { items: Item[] }) {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
           {items.map((m) => (
             <button key={m.id} onClick={() => setSel(m)} className={cn("hairline aspect-square overflow-hidden rounded-xl border bg-[var(--d-panel-2)]", sel?.id === m.id && "ring-2 ring-[var(--d-accent)]")}>
-              <img src={m.url} alt={m.alt ?? ""} className="size-full object-cover" loading="lazy" />
+              {m.mime_type?.startsWith("video/") ? <video src={m.url} muted preload="metadata" className="size-full object-cover" /> : <img src={m.url} alt={m.alt ?? ""} className="size-full object-cover" loading="lazy" />}
             </button>
           ))}
         </div>
