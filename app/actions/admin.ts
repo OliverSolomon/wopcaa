@@ -3,7 +3,7 @@
 import { refresh } from "next/cache";
 import { z } from "zod";
 import { one, query } from "@/lib/db";
-import { audit, requireCaseTeam, getViewer } from "@/lib/session";
+import { audit, requireCaseTeam } from "@/lib/session";
 import { addUpdate, notifyUser } from "@/lib/reports";
 import { statusLabel, urgencyLabel } from "@/lib/report-options";
 
@@ -64,20 +64,6 @@ export async function markEnquiry(id: string, handled: boolean): Promise<Result>
   const v = await requireCaseTeam();
   await query("update enquiries set handled_at = case when $2 then now() else null end where id = $1", [id, handled]);
   await audit(v.id, "enquiry.mark", id, { handled });
-  refresh();
-  return { ok: true };
-}
-
-export async function setRole(userId: string, role: "reporter" | "editor" | "admin" | "super_admin"): Promise<Result> {
-  const v = await getViewer();
-  if (!v || v.role !== "super_admin") return { ok: false, error: "Only a super admin can change roles." };
-  if (userId === v.id) return { ok: false, error: "You cannot change your own role." };
-  if (!["reporter", "editor", "admin", "super_admin"].includes(role)) return { ok: false, error: "Unknown role." };
-  await query(
-    `insert into profiles(user_id, role) values ($1,$2) on conflict (user_id) do update set role = $2, updated_at = now()`,
-    [userId, role],
-  );
-  await audit(v.id, "people.role", userId, { role });
   refresh();
   return { ok: true };
 }

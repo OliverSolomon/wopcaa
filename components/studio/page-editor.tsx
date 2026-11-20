@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeft, BadgeCheck, BarChart3, Check, ClipboardList, Columns2, Copy, EyeOff, Eye, GalleryHorizontal, GripVertical, Handshake, HelpCircle,
   History, Image as ImageIcon, LayoutGrid, ListOrdered, Loader2, Mail, Milestone, Monitor, MousePointerClick, MoreHorizontal, Newspaper, Orbit,
-  PanelTop, Plus, Quote, RotateCcw, ShieldCheck, Smartphone, Trash2, Type, Undo2, Upload, X, type LucideIcon,
+  PanelTop, Plus, Quote, RotateCcw, ShieldCheck, Smartphone, Trash2, Type, Undo2, Upload, X, Clapperboard, MapPin, Users, Images, type LucideIcon,
 } from "lucide-react";
 import { SECTION_DEFS, newSection, sectionDef, type Section } from "@/lib/content/schema";
 import { deletePage, discardDraft, publishPage, restoreRevision, saveDraft, unpublishPage } from "@/app/actions/studio";
 import { Fields } from "./fields";
 import { cn, timeAgo } from "@/lib/utils";
 
-const ICONS: Record<string, LucideIcon> = { Orbit, PanelTop, Quote, LayoutGrid, Image: ImageIcon, BarChart3, GalleryHorizontal, Columns2, ListOrdered, Type, Milestone, BadgeCheck, Handshake, Newspaper, HelpCircle, ShieldCheck, MousePointerClick, Mail, ClipboardList };
+const ICONS: Record<string, LucideIcon> = { Orbit, PanelTop, Quote, LayoutGrid, Image: ImageIcon, BarChart3, GalleryHorizontal, Columns2, ListOrdered, Type, Milestone, BadgeCheck, Handshake, Newspaper, HelpCircle, ShieldCheck, MousePointerClick, Mail, ClipboardList, Clapperboard, MapPin, Users, Images };
 
 export interface EditorPage {
   id: string; slug: string; status: "draft" | "published"; title: string; seo_description: string | null; sections: Section[];

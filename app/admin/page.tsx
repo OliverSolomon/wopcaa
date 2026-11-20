@@ -53,7 +53,7 @@ export default async function AdminHome() {
               <p className="muted text-[13px] font-medium">{t.label}</p>
               <t.icon className={t.warn ? "size-4 text-[var(--d-ochre)]" : "faint size-4"} />
             </div>
-            <p className="mt-3 font-display text-[2.4rem] leading-none tabular-nums">{t.value}</p>
+            <p className="mt-3 font-semibold text-[2.4rem] leading-none tabular-nums">{t.value}</p>
             <p className="faint mt-2 text-xs">{t.hint}</p>
           </div>
         ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -63,7 +63,27 @@ function fibonacciSphere(count: number, radius: number) {
 function Globe() {
   const group = useRef<THREE.Group>(null);
   const ring = useRef<THREE.Points>(null);
-  const { size, viewport } = useThree();
+  const { size, gl } = useThree();
+  // Drag to spin, with a little momentum when let go.
+  const drag = useRef({ down: false, x: 0, y: 0, vx: 0, vy: 0, rx: 0.15, ry: 0 });
+  useEffect(() => {
+    const el = gl.domElement;
+    el.style.touchAction = "pan-y";
+    el.style.cursor = "grab";
+    const down = (e: PointerEvent) => { drag.current.down = true; drag.current.x = e.clientX; drag.current.y = e.clientY; el.style.cursor = "grabbing"; };
+    const move = (e: PointerEvent) => {
+      const d = drag.current;
+      if (!d.down) return;
+      d.vy = (e.clientX - d.x) * 0.006; d.vx = (e.clientY - d.y) * 0.004;
+      d.ry += d.vy; d.rx = Math.max(-0.9, Math.min(0.9, d.rx + d.vx));
+      d.x = e.clientX; d.y = e.clientY;
+    };
+    const up = () => { drag.current.down = false; el.style.cursor = "grab"; };
+    el.addEventListener("pointerdown", down);
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    return () => { el.removeEventListener("pointerdown", down); window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); };
+  }, [gl]);
   const { pos, seed } = useMemo(() => fibonacciSphere(size.width < 768 ? 5000 : 9000, 1.9), [size.width]);
   const ringGeo = useMemo(() => {
     const n = 1400; const p = new Float32Array(n * 3); const s = new Float32Array(n);
@@ -75,24 +95,24 @@ function Globe() {
   }, []);
   const uniforms = useMemo(() => ({
     uTime: { value: 0 }, uPointer: { value: new THREE.Vector2() }, uPixel: { value: Math.min(window.devicePixelRatio, 2) },
-    uA: { value: new THREE.Color("#2f6b45") }, uB: { value: new THREE.Color("#cfe0c8") }, uC: { value: new THREE.Color("#e4a77c") },
+    uA: { value: new THREE.Color("#1bae70") }, uB: { value: new THREE.Color("#e3f4ea") }, uC: { value: new THREE.Color("#e4a196") },
   }), []);
-  const ringUniforms = useMemo(() => ({ ...uniforms, uA: { value: new THREE.Color("#e4a77c") }, uB: { value: new THREE.Color("#f5efe4") } }), [uniforms]);
+  const ringUniforms = useMemo(() => ({ ...uniforms, uA: { value: new THREE.Color("#e4a196") }, uB: { value: new THREE.Color("#f4f6f4") } }), [uniforms]);
 
   useFrame((state, dt) => {
     uniforms.uTime.value += dt;
     uniforms.uPointer.value.lerp(state.pointer, 0.05);
+    const d = drag.current;
+    if (!d.down) { d.ry += dt * 0.08 + d.vy; d.vy *= 0.94; d.vx *= 0.9; }
     if (group.current) {
-      group.current.rotation.y += dt * 0.06;
-      group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, -state.pointer.y * 0.25 + 0.15, 0.04);
-      group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, state.pointer.x * 0.12, 0.04);
+      group.current.rotation.y = d.ry;
+      group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, d.rx, 0.1);
     }
     if (ring.current) ring.current.rotation.y -= dt * 0.03;
   });
 
-  const offsetX = viewport.width > 9 ? viewport.width * 0.2 : 0;
   return (
-    <group position={[offsetX, viewport.width > 9 ? 0 : -0.6, 0]}>
+    <group>
       <group ref={group}>
         <points>
           <bufferGeometry>
@@ -145,7 +165,7 @@ function Field({ light }: { light?: boolean }) {
   }, []);
   const uniforms = useMemo(() => ({
     uTime: { value: 0 }, uPointer: { value: new THREE.Vector2() }, uPixel: { value: Math.min(window.devicePixelRatio, 2) },
-    uA: { value: new THREE.Color(light ? "#8fb596" : "#2f6b45") }, uB: { value: new THREE.Color(light ? "#c8693a" : "#e4a77c") },
+    uA: { value: new THREE.Color(light ? "#b9e3cc" : "#06752e") }, uB: { value: new THREE.Color(light ? "#1bae70" : "#e4a196") },
   }), [light]);
   useFrame((state, dt) => {
     uniforms.uTime.value += dt;
@@ -163,10 +183,10 @@ export default function Scene({ variant = "globe", light }: { variant?: "globe" 
   return (
     <Canvas
       dpr={[1, 2]}
-      camera={{ position: [0, 0, variant === "globe" ? 6.2 : 7], fov: 45 }}
+      camera={{ position: [0, 0, variant === "globe" ? 7.2 : 7], fov: 45 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-      eventSource={typeof document !== "undefined" ? document.body : undefined}
-      eventPrefix="client"
+      // The hero field sits behind the text, so it listens to the whole page; the globe listens to itself.
+      {...(variant === "field" && typeof document !== "undefined" ? { eventSource: document.body, eventPrefix: "client" as const } : {})}
     >
       {variant === "globe" ? <Globe /> : <Field light={light} />}
     </Canvas>

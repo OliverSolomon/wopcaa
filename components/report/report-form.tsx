@@ -20,13 +20,13 @@ const empty: ReportInput = {
   wants_contact: false, contact_method: "", contact_value: "", safe_times: "", consent_share: false, attachments: [],
 };
 
-const input = "w-full rounded-2xl border border-ink-900/10 bg-white px-4 py-3.5 text-[15px] outline-none transition placeholder:text-ink-400 focus:border-moss-600 focus:ring-4 focus:ring-moss-600/10";
-const lbl = "mb-2 block text-[14px] font-semibold text-ink-900";
+const input = "w-full rounded-2xl border border-forest/10 bg-white px-4 py-3.5 text-[15px] outline-none transition placeholder:text-slate-soft focus:border-green focus:ring-4 focus:ring-green/10";
+const lbl = "mb-2 block text-[14px] font-semibold text-forest";
 
 function Choice({ active, onClick, children, className }: { active: boolean; onClick: () => void; children: React.ReactNode; className?: string }) {
   return (
     <button type="button" onClick={onClick} aria-pressed={active}
-      className={cn("rounded-2xl border p-4 text-left transition", active ? "border-moss-600 bg-sage-100 ring-4 ring-moss-600/10" : "border-ink-900/10 bg-white hover:border-ink-900/25", className)}>
+      className={cn("rounded-2xl border p-4 text-left transition", active ? "border-green bg-leaf-soft ring-4 ring-green/10" : "border-forest/10 bg-white hover:border-forest/25", className)}>
       {children}
     </button>
   );
@@ -34,11 +34,11 @@ function Choice({ active, onClick, children, className }: { active: boolean; onC
 
 function Toggle({ on, onChange, label, hint }: { on: boolean; onChange: (v: boolean) => void; label: string; hint?: string }) {
   return (
-    <button type="button" onClick={() => onChange(!on)} className="flex w-full items-start gap-4 rounded-2xl border border-ink-900/10 bg-white p-4 text-left">
-      <span className={cn("relative mt-0.5 h-6 w-10 shrink-0 rounded-full transition", on ? "bg-moss-600" : "bg-sand-300")}>
+    <button type="button" onClick={() => onChange(!on)} className="flex w-full items-start gap-4 rounded-2xl border border-forest/10 bg-white p-4 text-left">
+      <span className={cn("relative mt-0.5 h-6 w-10 shrink-0 rounded-full transition", on ? "bg-green" : "bg-line")}>
         <span className={cn("absolute top-1 size-4 rounded-full bg-white transition-transform", on ? "translate-x-5" : "translate-x-1")} />
       </span>
-      <span><span className="block text-[15px] font-semibold">{label}</span>{hint ? <span className="mt-0.5 block text-sm text-ink-500">{hint}</span> : null}</span>
+      <span><span className="block text-[15px] font-semibold">{label}</span>{hint ? <span className="mt-0.5 block text-sm text-slate">{hint}</span> : null}</span>
     </button>
   );
 }
@@ -59,6 +59,9 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
       const raw = sessionStorage.getItem(DRAFT_KEY);
       if (raw) setD((p) => ({ ...p, ...JSON.parse(raw), mode: viewer ? p.mode : "anonymous" }));
     } catch {}
+    // Arriving from "Your county" on the home page fills the county in.
+    const county = new URLSearchParams(window.location.search).get("county");
+    if (county && COUNTIES.includes(county)) setD((p) => ({ ...p, county }));
   }, [viewer]);
   useEffect(() => {
     if (result) return;
@@ -116,50 +119,50 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
         {STEPS.map((s, i) => (
           <li key={s}>
             <button type="button" disabled={i > step} onClick={() => go(i)} className="w-full text-left disabled:cursor-default">
-              <span className={cn("block h-1 rounded-full transition-colors", i <= step ? "bg-moss-600" : "bg-sand-300")} />
-              <span className={cn("kicker mt-2 hidden text-[10px] md:block", i === step ? "text-ink-900" : "text-ink-400")}>{String(i + 1).padStart(2, "0")} {s}</span>
+              <span className={cn("block h-1 rounded-full transition-colors", i <= step ? "bg-green" : "bg-line")} />
+              <span className={cn("mt-2 hidden text-xs md:block", i === step ? "text-forest" : "text-slate-soft")}>{String(i + 1).padStart(2, "0")} {s}</span>
             </button>
           </li>
         ))}
       </ol>
 
-      <div className="rounded-[28px] bg-sand-100 p-5 md:p-10">
+      <div className="rounded-[28px] bg-mist-deep p-5 md:p-10">
         {step === 0 && (
           <div className="grid gap-6">
-            <h2 className="display text-[2.2rem] md:text-[2.8rem]">How would you like to report?</h2>
+            <h2 className="t-h2">How would you like to report?</h2>
             <div className="grid gap-4 md:grid-cols-2">
               <Choice active={d.mode === "anonymous"} onClick={() => set("mode", "anonymous")} className="p-6">
-                <EyeOff className="size-6 text-moss-600" />
-                <p className="font-display mt-4 text-2xl">Anonymously</p>
-                <p className="mt-2 text-[15px] text-ink-500">No name or account. You get a reference and a private key to check progress and talk to us.</p>
+                <EyeOff className="size-6 text-green" />
+                <p className="mt-4 text-xl font-semibold">Anonymously</p>
+                <p className="mt-2 text-[15px] text-slate">No name or account. You get a reference and a private key to check progress and talk to us.</p>
               </Choice>
               <Choice active={d.mode === "account"} onClick={() => set("mode", "account")} className="p-6">
-                <UserRound className="size-6 text-moss-600" />
-                <p className="font-display mt-4 text-2xl">With my account</p>
-                <p className="mt-2 text-[15px] text-ink-500">{viewer ? <>Signed in as <strong>{viewer.name}</strong>. Follow every report from your dashboard.</> : "Follow your reports and messages from a private dashboard."}</p>
+                <UserRound className="size-6 text-green" />
+                <p className="mt-4 text-xl font-semibold">With my account</p>
+                <p className="mt-2 text-[15px] text-slate">{viewer ? <>Signed in as <strong>{viewer.name}</strong>. Follow every report from your dashboard.</> : "Follow your reports and messages from a private dashboard."}</p>
               </Choice>
             </div>
             {d.mode === "account" && !viewer ? (
               <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-white p-5">
-                <p className="flex-1 text-[15px] text-ink-500">Sign in or create an account first. You will come straight back here.</p>
-                <Link href="/sign-in?next=/report" className="rounded-full bg-forest-900 px-5 py-2.5 text-sm font-semibold text-white">Sign in</Link>
-                <Link href="/sign-up?next=/report" className="rounded-full border border-ink-900/15 px-5 py-2.5 text-sm font-semibold">Create account</Link>
+                <p className="flex-1 text-[15px] text-slate">Sign in or create an account first. You will come straight back here.</p>
+                <Link href="/sign-in?next=/report" className="rounded-full bg-forest px-5 py-2.5 text-sm font-semibold text-white">Sign in</Link>
+                <Link href="/sign-up?next=/report" className="rounded-full border border-forest/15 px-5 py-2.5 text-sm font-semibold">Create account</Link>
               </div>
             ) : null}
-            <p className="flex items-start gap-3 text-sm text-ink-500"><Lock className="mt-0.5 size-4 shrink-0" /> What you write is encrypted before it is stored. Only the WOPCAA case team can read it.</p>
+            <p className="flex items-start gap-3 text-sm text-slate"><Lock className="mt-0.5 size-4 shrink-0" /> What you write is encrypted before it is stored. Only the WOPCAA case team can read it.</p>
           </div>
         )}
 
         {step === 1 && (
           <div className="grid gap-8">
-            <h2 className="display text-[2.2rem] md:text-[2.8rem]">What happened?</h2>
+            <h2 className="t-h2">What happened?</h2>
             <div>
               <span className={lbl}>Choose what fits best</span>
               <div className="grid gap-3 sm:grid-cols-2">
                 {CATEGORIES.map((c) => (
                   <Choice key={c.id} active={d.category === c.id} onClick={() => set("category", c.id)}>
                     <span className="block text-[15px] font-semibold">{c.label}</span>
-                    <span className="mt-1 block text-[13px] text-ink-500">{c.hint}</span>
+                    <span className="mt-1 block text-[13px] text-slate">{c.hint}</span>
                   </Choice>
                 ))}
               </div>
@@ -174,15 +177,15 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
             <div>
               <label htmlFor="desc" className={lbl}>Tell us in your own words</label>
               <textarea id="desc" rows={8} value={d.description} onChange={(e) => set("description", e.target.value)} className={input} placeholder="Share as much or as little as you are comfortable with. You can write in English or Kiswahili." />
-              <p className="mt-2 text-right text-xs text-ink-400">{d.description.length} / 8000</p>
+              <p className="mt-2 text-right text-xs text-slate-soft">{d.description.length} / 8000</p>
             </div>
           </div>
         )}
 
         {step === 2 && (
           <div className="grid gap-6">
-            <h2 className="display text-[2.2rem] md:text-[2.8rem]">When and where?</h2>
-            <p className="-mt-2 text-ink-500">All of this is optional. Skip anything you prefer not to share.</p>
+            <h2 className="t-h2">When and where?</h2>
+            <p className="-mt-2 text-slate">All of this is optional. Skip anything you prefer not to share.</p>
             <div className="grid gap-4 md:grid-cols-2">
               <div><label className={lbl} htmlFor="date">Date (or roughly)</label><input id="date" type="date" value={d.incident_date} onChange={(e) => set("incident_date", e.target.value)} className={input} /></div>
               <div><label className={lbl} htmlFor="county">County</label>
@@ -207,11 +210,11 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
 
         {step === 3 && (
           <div className="grid gap-6">
-            <h2 className="display text-[2.2rem] md:text-[2.8rem]">How can we support you?</h2>
+            <h2 className="t-h2">How can we support you?</h2>
             <Toggle on={d.in_danger} onChange={(v) => set("in_danger", v)} label="I am in danger right now" hint="Your report goes to the top of the queue." />
             {d.in_danger && hotlines.length ? (
-              <div className="rounded-2xl border border-ochre-500/30 bg-ochre-500/10 p-5">
-                <p className="flex items-center gap-2 font-semibold text-ochre-600"><AlertTriangle className="size-4" /> Please also call for help now</p>
+              <div className="rounded-2xl border border-coral/30 bg-coral/10 p-5">
+                <p className="flex items-center gap-2 font-semibold text-coral-ink"><AlertTriangle className="size-4" /> Please also call for help now</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {hotlines.map((h) => <a key={h.number} href={`tel:${h.number.replace(/\s/g, "")}`} className="rounded-full bg-white px-4 py-2 text-sm"><strong>{h.number}</strong> · {h.label}</a>)}
                 </div>
@@ -224,7 +227,7 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
                   const on = d.support_needed.includes(s.id);
                   return (
                     <button type="button" key={s.id} onClick={() => setD((p) => ({ ...p, support_needed: p.support_needed.includes(s.id) ? p.support_needed.filter((x) => x !== s.id) : [...p.support_needed, s.id] }))}
-                      className={cn("inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition", on ? "border-moss-600 bg-moss-600 text-white" : "border-ink-900/10 bg-white hover:border-ink-900/30")}>
+                      className={cn("inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition", on ? "border-green bg-green text-white" : "border-forest/10 bg-white hover:border-forest/30")}>
                       {on ? <Check className="size-3.5" /> : null}{s.label}
                     </button>
                   );
@@ -239,7 +242,7 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
                   <span className={lbl}>How?</span>
                   <div className="flex flex-wrap gap-2">
                     {(["phone", "sms", "whatsapp", "email"] as const).map((m) => (
-                      <button type="button" key={m} onClick={() => set("contact_method", m)} className={cn("rounded-full border px-4 py-2 text-sm capitalize", d.contact_method === m ? "border-moss-600 bg-sage-100 font-semibold" : "border-ink-900/10")}>{m === "sms" ? "SMS" : m === "whatsapp" ? "WhatsApp" : m}</button>
+                      <button type="button" key={m} onClick={() => set("contact_method", m)} className={cn("rounded-full border px-4 py-2 text-sm capitalize", d.contact_method === m ? "border-green bg-leaf-soft font-semibold" : "border-forest/10")}>{m === "sms" ? "SMS" : m === "whatsapp" ? "WhatsApp" : m}</button>
                     ))}
                   </div>
                 </div>
@@ -249,17 +252,17 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
             ) : null}
             <div>
               <span className={lbl}>Evidence (optional)</span>
-              <label className={cn("flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-ink-900/15 bg-white p-8 text-center transition hover:border-moss-600", uploading && "pointer-events-none opacity-60")}>
-                {uploading ? <Loader2 className="size-6 animate-spin text-moss-600" /> : <FileUp className="size-6 text-moss-600" />}
+              <label className={cn("flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-forest/15 bg-white p-8 text-center transition hover:border-green", uploading && "pointer-events-none opacity-60")}>
+                {uploading ? <Loader2 className="size-6 animate-spin text-green" /> : <FileUp className="size-6 text-green" />}
                 <span className="text-[15px] font-semibold">Add photos, screenshots, documents or voice notes</span>
-                <span className="text-xs text-ink-400">Up to 6 files, 20 MB each. Stored privately.</span>
+                <span className="text-xs text-slate-soft">Up to 6 files, 20 MB each. Stored privately.</span>
                 <input type="file" multiple className="sr-only" accept="image/*,application/pdf,audio/*,video/*" onChange={(e) => addFiles(e.target.files)} />
               </label>
               {d.attachments.length ? (
                 <ul className="mt-3 grid gap-2">
                   {d.attachments.map((a) => (
                     <li key={a.key} className="flex items-center gap-3 rounded-xl bg-white px-4 py-2.5 text-sm">
-                      <Paperclip className="size-4 text-ink-400" /><span className="flex-1 truncate">{a.name}</span>
+                      <Paperclip className="size-4 text-slate-soft" /><span className="flex-1 truncate">{a.name}</span>
                       <button type="button" onClick={() => set("attachments", d.attachments.filter((x) => x.key !== a.key))} aria-label="Remove"><X className="size-4" /></button>
                     </li>
                   ))}
@@ -271,8 +274,8 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
 
         {step === 4 && (
           <div className="grid gap-6">
-            <h2 className="display text-[2.2rem] md:text-[2.8rem]">Check and send</h2>
-            <dl className="grid gap-px overflow-hidden rounded-2xl bg-ink-900/10 text-[15px]">
+            <h2 className="t-h2">Check and send</h2>
+            <dl className="grid gap-px overflow-hidden rounded-2xl bg-forest/10 text-[15px]">
               {[
                 ["Reporting", d.mode === "anonymous" ? "Anonymously" : `As ${viewer?.name}`],
                 ["What happened", CATEGORIES.find((c) => c.id === d.category)?.label],
@@ -286,7 +289,7 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
                 ["Files", d.attachments.length ? `${d.attachments.length} attached` : "None"],
               ].map(([k, v]) => (
                 <div key={k} className="grid gap-1 bg-white px-5 py-3.5 md:grid-cols-[180px_1fr]">
-                  <dt className="text-ink-400">{k}</dt><dd className="whitespace-pre-wrap break-words">{v}</dd>
+                  <dt className="text-slate-soft">{k}</dt><dd className="whitespace-pre-wrap break-words">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -294,14 +297,14 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
           </div>
         )}
 
-        {error ? <p className="mt-6 flex items-center gap-2 rounded-2xl bg-ochre-500/10 px-4 py-3 text-sm text-ochre-600" role="alert"><AlertTriangle className="size-4 shrink-0" /> {error}</p> : null}
+        {error ? <p className="mt-6 flex items-center gap-2 rounded-2xl bg-coral/10 px-4 py-3 text-sm text-coral-ink" role="alert"><AlertTriangle className="size-4 shrink-0" /> {error}</p> : null}
 
-        <div className="mt-10 flex items-center justify-between gap-4 border-t border-ink-900/10 pt-6">
+        <div className="mt-10 flex items-center justify-between gap-4 border-t border-forest/10 pt-6">
           {step > 0 ? <button type="button" onClick={() => go(step - 1)} className="inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold hover:bg-white"><ArrowLeft className="size-4" /> Back</button> : <span />}
           {step < STEPS.length - 1 ? (
-            <button type="button" onClick={next} className="inline-flex items-center gap-2 rounded-full bg-forest-900 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-forest-800">Continue <ArrowRight className="size-4" /></button>
+            <button type="button" onClick={next} className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-forest-soft">Continue <ArrowRight className="size-4" /></button>
           ) : (
-            <button type="button" onClick={submit} disabled={pending || uploading} className="inline-flex items-center gap-2 rounded-full bg-ochre-500 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-ochre-600 disabled:opacity-60">
+            <button type="button" onClick={submit} disabled={pending || uploading} className="inline-flex items-center gap-2 rounded-full bg-coral px-7 py-3.5 text-sm font-semibold text-forest transition hover:bg-coral-hover disabled:opacity-60">
               {pending ? <Loader2 className="size-4 animate-spin" /> : <ShieldCheck className="size-4" />} Send report securely
             </button>
           )}
@@ -315,9 +318,9 @@ function CopyRow({ label, value }: { label: string; value: string }) {
   const [done, setDone] = useState(false);
   return (
     <div className="flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-4">
-      <div><p className="kicker text-ink-400">{label}</p><p className="mt-1 font-mono text-2xl tracking-wider">{value}</p></div>
-      <button type="button" onClick={() => { navigator.clipboard.writeText(value); setDone(true); setTimeout(() => setDone(false), 1600); }} className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 px-4 py-2 text-sm">
-        {done ? <Check className="size-4 text-moss-600" /> : <Copy className="size-4" />} {done ? "Copied" : "Copy"}
+      <div><p className="t-meta">{label}</p><p className="mt-1 font-mono text-2xl tracking-wider text-forest">{value}</p></div>
+      <button type="button" onClick={() => { navigator.clipboard.writeText(value); setDone(true); setTimeout(() => setDone(false), 1600); }} className="inline-flex items-center gap-1.5 rounded-full border border-forest/10 px-4 py-2 text-sm">
+        {done ? <Check className="size-4 text-green" /> : <Copy className="size-4" />} {done ? "Copied" : "Copy"}
       </button>
     </div>
   );
@@ -325,26 +328,26 @@ function CopyRow({ label, value }: { label: string; value: string }) {
 
 function Submitted({ result }: { result: Extract<SubmitResult, { ok: true }> }) {
   return (
-    <div className="rounded-[28px] bg-sand-100 p-6 md:p-12">
-      <span className="grid size-14 place-items-center rounded-full bg-moss-600 text-white"><Check className="size-7" /></span>
-      <h2 className="display mt-8 text-[2.6rem] md:text-[3.6rem]">Your report is safe with us.</h2>
-      <p className="mt-4 max-w-xl text-lg text-ink-500">The case team has been alerted and will review it. Thank you for trusting us.</p>
+    <div className="rounded-[28px] bg-mist-deep p-6 md:p-12">
+      <span className="grid size-14 place-items-center rounded-full bg-green text-white"><Check className="size-7" /></span>
+      <h2 className="t-h1 mt-8">Your report is safe with us.</h2>
+      <p className="mt-4 max-w-xl text-lg text-slate">The case team has been alerted and will review it. Thank you for trusting us.</p>
       {result.mode === "anonymous" ? (
         <>
           <div className="mt-10 grid gap-3">
             <CopyRow label="Reference" value={result.reference} />
             <CopyRow label="Private key" value={result.accessKey!} />
           </div>
-          <p className="mt-5 flex items-start gap-3 rounded-2xl bg-ochre-500/10 p-4 text-sm text-ochre-600">
+          <p className="mt-5 flex items-start gap-3 rounded-2xl bg-coral/10 p-4 text-sm text-coral-ink">
             <AlertTriangle className="mt-0.5 size-4 shrink-0" />
             Write these down somewhere safe. They are the only way to see updates and reply to the case team, and we cannot show the key again.
           </p>
-          <Link href="/track" className="mt-8 inline-flex items-center gap-2 rounded-full bg-forest-900 px-6 py-3.5 text-sm font-semibold text-white">Track this report <ArrowRight className="size-4" /></Link>
+          <Link href="/track" className="mt-8 inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-semibold text-white">Track this report <ArrowRight className="size-4" /></Link>
         </>
       ) : (
         <>
           <div className="mt-10"><CopyRow label="Reference" value={result.reference} /></div>
-          <Link href={`/account/reports/${result.id}`} className="mt-8 inline-flex items-center gap-2 rounded-full bg-forest-900 px-6 py-3.5 text-sm font-semibold text-white">Open in my dashboard <ArrowRight className="size-4" /></Link>
+          <Link href={`/account/reports/${result.id}`} className="mt-8 inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-semibold text-white">Open in my dashboard <ArrowRight className="size-4" /></Link>
         </>
       )}
     </div>

@@ -36,7 +36,7 @@ async function Draft({ params }: { params: Promise<{ id: string }> }) {
 
 export default function Preview({ params }: PageProps<"/preview/[id]">) {
   return (
-    <Suspense fallback={<div className="grid min-h-svh place-items-center text-sm text-ink-400">Loading preview…</div>}>
+    <Suspense fallback={<div className="grid min-h-svh place-items-center text-sm text-slate-soft">Loading preview…</div>}>
       <Draft params={params} />
     </Suspense>
   );

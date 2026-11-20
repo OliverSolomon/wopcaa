@@ -28,7 +28,7 @@ export function QuickExit() {
   return (
     <button
       onClick={leave}
-      className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-3 text-sm font-semibold text-white shadow-2xl ring-1 ring-white/10 transition hover:bg-black"
+      className="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white shadow-2xl ring-1 ring-white/10 transition hover:bg-black"
       title="Leave this site now (or press Esc twice)"
     >
       <LogOut className="size-4" /> Leave quickly

@@ -7,7 +7,7 @@ import { categoryLabel, statusLabel, STATUSES } from "@/lib/report-options";
 import { formatDate, cn } from "@/lib/utils";
 import { Thread } from "./thread";
 
-const input = "w-full rounded-2xl border border-ink-900/10 bg-white px-4 py-3.5 text-[15px] outline-none transition focus:border-moss-600 focus:ring-4 focus:ring-moss-600/10";
+const input = "w-full rounded-2xl border border-forest/10 bg-white px-4 py-3.5 text-[15px] outline-none transition focus:border-green focus:ring-4 focus:ring-green/10";
 
 export function TrackReport() {
   const [ref, setRef] = useState("");
@@ -30,11 +30,11 @@ export function TrackReport() {
 
   if (!data) {
     return (
-      <form onSubmit={(e) => { e.preventDefault(); open(); }} className="grid gap-4 rounded-[28px] bg-sand-100 p-6 md:p-10">
+      <form onSubmit={(e) => { e.preventDefault(); open(); }} className="grid gap-4 rounded-[28px] bg-mist-deep p-6 md:p-10">
         <div><label className="mb-2 block text-sm font-semibold" htmlFor="ref">Reference</label><input id="ref" value={ref} onChange={(e) => setRef(e.target.value.toUpperCase())} placeholder="WP-ABCD-1234" className={cn(input, "font-mono tracking-wider")} autoComplete="off" /></div>
         <div><label className="mb-2 block text-sm font-semibold" htmlFor="key">Private key</label><input id="key" type="password" value={key} onChange={(e) => setKey(e.target.value)} className={cn(input, "font-mono")} autoComplete="off" /></div>
-        {error ? <p className="text-sm text-ochre-600" role="alert">{error}</p> : null}
-        <button disabled={pending || !ref || !key} className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-forest-900 px-6 py-3.5 text-sm font-semibold text-white disabled:opacity-50">
+        {error ? <p className="text-sm text-coral-ink" role="alert">{error}</p> : null}
+        <button disabled={pending || !ref || !key} className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-semibold text-white disabled:opacity-50">
           {pending ? <Loader2 className="size-4 animate-spin" /> : null} Open my report <ArrowRight className="size-4" />
         </button>
       </form>
@@ -44,31 +44,31 @@ export function TrackReport() {
   const idx = STATUSES.findIndex((s) => s.id === data.status);
   return (
     <div className="grid gap-6">
-      <div className="rounded-[28px] bg-sand-100 p-6 md:p-10">
+      <div className="rounded-[28px] bg-mist-deep p-6 md:p-10">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="kicker text-ink-400">Report {data.reference}</p>
-            <h2 className="display mt-3 text-[2.4rem]">{statusLabel(data.status)}</h2>
-            <p className="mt-2 text-sm text-ink-500">{categoryLabel(data.category)} · sent {formatDate(data.created_at)}</p>
+            <p className="t-meta">Report {data.reference}</p>
+            <h2 className="t-h2 mt-2">{statusLabel(data.status)}</h2>
+            <p className="mt-2 text-sm text-slate">{categoryLabel(data.category)} · sent {formatDate(data.created_at)}</p>
           </div>
-          <button onClick={() => { setData(null); setKey(""); }} className="inline-flex items-center gap-2 rounded-full border border-ink-900/10 px-4 py-2 text-sm"><LogOut className="size-4" /> Close</button>
+          <button onClick={() => { setData(null); setKey(""); }} className="inline-flex items-center gap-2 rounded-full border border-forest/10 px-4 py-2 text-sm"><LogOut className="size-4" /> Close</button>
         </div>
         <ol className="mt-8 grid grid-cols-5 gap-2">
           {STATUSES.map((s, i) => (
             <li key={s.id}>
-              <span className={cn("block h-1.5 rounded-full", i <= idx ? "bg-moss-600" : "bg-sand-300")} />
-              <span className={cn("mt-2 block text-[11px] md:text-xs", i === idx ? "font-semibold" : "text-ink-400")}>{s.label}</span>
+              <span className={cn("block h-1.5 rounded-full", i <= idx ? "bg-green" : "bg-line")} />
+              <span className={cn("mt-2 block text-[11px] md:text-xs", i === idx ? "font-semibold" : "text-slate-soft")}>{s.label}</span>
             </li>
           ))}
         </ol>
       </div>
-      <div className="rounded-[28px] bg-sand-100 p-6 md:p-10">
-        <p className="kicker mb-6 text-ink-400">Messages with the case team</p>
+      <div className="rounded-[28px] bg-mist-deep p-6 md:p-10">
+        <p className="mb-6 font-semibold">Messages with the case team</p>
         <Thread items={data.thread} side="reporter" />
         <div className="mt-8 grid gap-3">
           <textarea rows={3} value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Write to the case team…" className={input} />
-          {error ? <p className="text-sm text-ochre-600">{error}</p> : null}
-          <button onClick={send} disabled={pending || msg.trim().length < 2} className="inline-flex w-fit items-center gap-2 rounded-full bg-forest-900 px-5 py-3 text-sm font-semibold text-white disabled:opacity-50">
+          {error ? <p className="text-sm text-coral-ink">{error}</p> : null}
+          <button onClick={send} disabled={pending || msg.trim().length < 2} className="inline-flex w-fit items-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white disabled:opacity-50">
             {pending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />} Send
           </button>
         </div>

@@ -34,9 +34,9 @@ const settings = {
     { label: "Police emergency", number: "999" },
   ],
   nav: [
-    { label: "Who we are", href: "/about", children: [{ label: "About us", href: "/about" }, { label: "Our values", href: "/about#values" }, { label: "Membership", href: "/membership" }] },
-    { label: "Our work", href: "/cop-mashinani", children: [{ label: "COP Mashinani", href: "/cop-mashinani" }, { label: "Safe reporting", href: "/report" }, { label: "Track a report", href: "/track" }] },
-    { label: "Media centre", href: "/news", children: [{ label: "Articles", href: "/news" }, { label: "Press releases", href: "/news" }, { label: "Events", href: "/news" }] },
+    { label: "Who we are", href: "/about", children: [{ label: "About us", href: "/about" }, { label: "Our people", href: "/our-people" }, { label: "Membership", href: "/membership" }] },
+    { label: "Our work", href: "/cop-mashinani", children: [{ label: "COP Mashinani", href: "/cop-mashinani" }, { label: "Safe reporting", href: "/report" }, { label: "Follow up on a report", href: "/track" }] },
+    { label: "Media centre", href: "/news", children: [{ label: "News and articles", href: "/news" }, { label: "Press releases", href: "/news?kind=press" }, { label: "Events", href: "/news?kind=event" }] },
     { label: "Contact", href: "/contact" },
   ],
 };
@@ -55,80 +55,79 @@ const pages = [
   {
     slug: "home", title: "Home", seo: settings.seoDescription,
     sections: [
-      S("hero3d", {
-        eyebrow: "Women · Peace · Climate · Justice",
-        title: "Empowering women for a *greener*, peaceful tomorrow.",
-        subtitle: "We are dedicated to fostering positive change by empowering women to actively participate in peacebuilding, climate action and justice initiatives.",
-        primary: { label: "Learn more", href: "/about" }, secondary: { label: "Report abuse safely", href: "/report" }, variant: "globe",
-      }),
-      S("statement", {
-        kicker: "01 / Who we are",
-        text: "We envision a secure and sustainable future for all, where women lead the climate action that shapes their communities.",
-        body: "Climate change isn't just a global crisis, it's a gendered one. WOPCAA brings together women experts and grassroots leaders to turn that understanding into action.",
-        link: { label: "Our story", href: "/about" },
-      }),
-      S("pillars", {
-        kicker: "02 / What we do", heading: "Three pillars, one future.",
-        intro: "Our work sits where peace, climate and justice meet, because for women on the frontline they were never separate.",
-        items: [
-          { title: "Peacebuilding initiatives", body: "Through inclusive dialogues, mediation, and community development projects, we work to resolve conflicts exacerbated by climate change and promote lasting peace.", image: "/images/maasai-women.jpg", href: "/about" },
-          { title: "Climate resilience actions", body: "We promote climate resilience by raising awareness and supporting climate adaptation strategies led by the communities who live them.", image: "/images/climate.jpg", href: "/cop-mashinani" },
-          { title: "Social justice advocacy", body: "Through policy engagement and partnerships, we aim to create inclusive societies where justice and equal opportunities prevail.", image: "/images/activism.jpg", href: "/report" },
+      S("heroMedia", {
+        title: "Empowering women for a greener, peaceful tomorrow.",
+        subtitle: "Women leading peace, climate action and justice, starting in Kajiado.",
+        primary: { label: "About our work", href: "/about" }, secondary: { label: "Report abuse safely", href: "/report" },
+        images: [
+          { image: "/images/cop28.jpeg", caption: "COP28 Mashinani, Isinya" },
+          { image: "/images/maasai-women.jpg", caption: "Women leaders, Kajiado" },
+          { image: "/images/table-banking.jpg", caption: "A table banking circle" },
+          { image: "/images/voices.jpeg", caption: "Recording women's stories, 2024" },
         ],
       }),
-      S("parallaxBanner", {
-        image: "/images/cop28.jpeg", kicker: "Join our community",
-        heading: "We have to step up as women and take the lead.",
-        body: "We need to reshape our own perception of how we view ourselves. Join a network of experts for the vulnerable.",
-        cta: { label: "Become a member", href: "/membership" },
-      }),
-      S("stats", {
-        kicker: "", heading: "",
-        items: [
-          { value: "47", label: "Counties our safe reporting line serves", note: "Anonymous, encrypted, free" },
-          { value: "5", label: "Strategic interventions", note: "From community resilience to policy" },
-          { value: "5", label: "Partner organisations", note: "Across Kenya and Africa" },
-          { value: "2023", label: "First COP Mashinani", note: "Isinya, Kajiado County" },
+      S("story", {
+        scenes: [
+          { image: "/images/maasai-women.jpg", line: "This is Kajiado.", sub: "Open pasture, scarce water, and women who hold their communities together.", weather: "seeds" },
+          { image: "/images/articles/Kenya-Floods.png", line: "The rains failed. Then they came all at once.", sub: "In 2024 floods across Kenya killed more than 200 people and displaced more than 20,000 families.", note: "Kenya Disaster Response Unit, cited in our article on flooding in East Africa", weather: "rain" },
+          { image: "/images/voices.jpeg", line: "Women carry it first.", sub: "Water, food, land and safety: when the climate breaks, the weight lands on women and girls, and violence often follows.", weather: "embers" },
+          { image: "/images/cop28.jpeg", line: "So they lead.", sub: "At COP Mashinani in Isinya, Maasai women set the agenda for climate action in their own words.", weather: "seeds" },
         ],
+        endingLine: "A greener, peaceful tomorrow. Ready when you are.",
+        primary: { label: "Join us", href: "/membership" }, secondary: { label: "Report abuse safely", href: "/report" },
+      }),
+      S("bento", {
+        heading: "What we do",
+        intro: "Our emblem holds a globe, a dove and the scales of justice. Our work holds all three together, because for women on the frontline they were never separate.",
+        items: [
+          { title: "Climate resilience", body: "We raise awareness and support adaptation that communities lead themselves: water, livelihoods and land.", motif: "climate", tags: "Adaptation, Awareness, Livelihoods", href: "/cop-mashinani" },
+          { title: "Peacebuilding", body: "Through dialogue, mediation and community projects, we resolve conflicts made worse by climate change.", motif: "peace", tags: "Dialogue, Mediation", href: "/about" },
+          { title: "Social justice", body: "Policy engagement, partnerships and a safe way to report abuse, so that justice reaches every woman.", motif: "justice", tags: "Policy, Safe reporting", href: "/report" },
+          { title: "COP Mashinani", body: "Our grassroots climate conference brings the global conversation to the women it affects most.", motif: "photo", image: "/images/cop-2.jpeg", href: "/cop-mashinani" },
+        ],
+      }),
+      S("impact", {
+        heading: "Why this work matters",
+        intro: "In the places we work, violence against women and the climate crisis feed each other. These are the national figures we start from.",
+        items: [
+          { value: "34%", label: "of women aged 15 to 49 have experienced physical violence since age 15" },
+          { value: "13%", label: "of women aged 15 to 49 have experienced sexual violence" },
+          { value: "15%", label: "of women aged 15 to 49 have undergone female genital mutilation" },
+        ],
+        source: "Kenya Demographic and Health Survey 2022, Kenya National Bureau of Statistics",
       }),
       S("gallery", {
-        kicker: "Field notes", heading: "From the *grassroots*.",
+        heading: "From the grassroots",
         items: [
-          { image: "/images/cop28.jpeg", caption: "COP28 Mashinani", place: "Isinya · Nov 2023" },
+          { image: "/images/cop28.jpeg", caption: "COP28 Mashinani", place: "Isinya, November 2023" },
           { image: "/images/table-banking.jpg", caption: "Table banking circle", place: "Kajiado" },
-          { image: "/images/voices.jpeg", caption: "Voices of resilience", place: "Maasai women · 2024" },
+          { image: "/images/voices.jpeg", caption: "Voices of resilience", place: "Maasai women, 2024" },
           { image: "/images/cop-1.jpeg", caption: "Community dialogue", place: "Kajiado" },
           { image: "/images/cop-2.jpeg", caption: "Localising climate solutions", place: "COP Mashinani" },
-          { image: "/images/about.jpeg", caption: "Experts for the vulnerable", place: "WOPCAA" },
         ],
       }),
       S("reportCta", {
-        kicker: "Safe · Confidential · Anonymous if you choose",
         heading: "You are not alone. Tell us what happened.",
-        body: "If you have experienced violence or abuse, including violence linked to land, water or conflict, our case team is here to listen and connect you to support. You can report without giving your name.",
+        body: "If you have experienced violence or abuse, including violence linked to land, water or conflict, our case team will listen and connect you to support. You can report without giving your name.",
         showHotlines: true,
       }),
-      S("posts", { kicker: "03 / Media centre", heading: "Latest from WOPCAA", kind: "all", limit: 3 }),
-      S("partners", { kicker: "Partners", heading: "In partnership with", items: partners }),
+      S("county", { heading: "Your county. Your next step.", intro: "Wherever you are in Kenya, there is something you can do today." }),
+      S("posts", { heading: "News and articles", kind: "all", limit: 3 }),
+      S("partners", { heading: "Working with", items: partners }),
     ],
   },
   {
     slug: "about", title: "About us", seo: "Our vision, mission, story and values: an Africa where women are empowered to lead climate action.",
     sections: [
-      S("pageHeader", { kicker: "Who we are", title: "An Africa where women *lead* climate action.", intro: "WOPCAA harnesses the collective expertise of women to catalyse innovative climate actions, and to make sure the people most affected are heard first.", image: "/images/about.jpeg" }),
-      S("split", {
-        kicker: "Vision & mission", heading: "Why we exist.",
-        body: "**Our vision.** We envision an Africa where women are empowered to lead climate action.\n\n**Our mission.** Our mission is to harness the collective expertise of women to catalyse innovative climate actions.",
-        image: "/images/maasai-women.jpg", cta: { label: "Join us", href: "/membership" }, reverse: false,
-      }),
+      S("pageHeader", { title: "An Africa where women lead climate action.", intro: "WOPCAA harnesses the collective expertise of women to catalyse innovative climate actions, and to make sure the people most affected are heard first.", image: "/images/about.jpeg" }),
+      S("photoPair", { heading: "Our vision and mission", imageA: "/images/maasai-women.jpg", imageB: "/images/table-banking.jpg", body: "**Our vision.** We envision an Africa where women are empowered to lead climate action.\n\n**Our mission.** Our mission is to harness the collective expertise of women to catalyse innovative climate actions.", link: { label: "Join us", href: "/membership" } }),
       S("statement", {
-        kicker: "Our story",
         text: "We were born from a stark realisation: climate change isn't just a global crisis, it's a gendered one.",
-        body: "## The gender and climate lens\n\nWomen carry a disproportionate share of the burden when droughts, floods and conflict over resources strike, yet they are too often absent where decisions are made. We look at every climate question through that lens.\n\n## The expert for the vulnerable model\n\nOur members are professionals and community leaders who put their expertise to work for those most exposed. We call them *experts for the vulnerable*.",
+        body: "## The gender and climate lens\n\nWomen carry a disproportionate share of the burden when droughts, floods and conflict over resources strike, yet they are too often absent where decisions are made. We look at every climate question through that lens.\n\n## The expert for the vulnerable model\n\nOur members are professionals and community leaders who put their expertise to work for those most exposed. We call them experts for the vulnerable.",
         link: { label: "", href: "" },
       }),
       S("values", {
-        kicker: "How we work", heading: "Strategic interventions",
+        heading: "Strategic interventions",
         items: [
           { title: "Promoting gender-responsive climate action", body: "Making sure climate plans, funds and programmes reach and are shaped by women." },
           { title: "Building community-led resilience", body: "Supporting local adaptation, livelihoods and early warning that communities own." },
@@ -138,7 +137,7 @@ const pages = [
         ],
       }),
       { ...S("values", {
-        kicker: "What guides us", heading: "Our values",
+        heading: "Our values",
         items: [
           { title: "Empowerment", body: "We build the confidence, skills and voice of women to lead." },
           { title: "Collaboration", body: "We work with communities, partners and government, because no one solves this alone." },
@@ -148,29 +147,25 @@ const pages = [
           { title: "Justice", body: "We stand for fairness, accountability and an end to violence against women." },
         ],
       }), _key: "values" },
-      S("partners", { kicker: "Partners", heading: "In partnership with", items: partners }),
+      S("partners", { heading: "In partnership with", items: partners }),
       S("cta", { heading: "Lend your expertise to those who need it most.", body: "Join WOPCAA as an individual or organisation member.", primary: { label: "Membership", href: "/membership" }, secondary: { label: "Contact us", href: "/contact" }, tone: "forest" }),
     ],
   },
   {
     slug: "cop-mashinani", title: "COP Mashinani", seo: "Amplifying grassroots women's voices for climate action in Kenya.",
     sections: [
-      S("pageHeader", { kicker: "Our initiatives · COP Mashinani", title: "Amplifying grassroots women's *voices* for climate action.", intro: "COP Mashinani is a regional initiative that takes the principles of the global climate conference to a local level. Mashinani means \"at the grassroots\".", image: "/images/table-banking.jpg" }),
+      S("pageHeader", { title: "Amplifying grassroots women's voices for climate action.", intro: "COP Mashinani is a regional initiative that takes the principles of the global climate conference to a local level. Mashinani means \"at the grassroots\".", image: "/images/table-banking.jpg" }),
       S("values", {
-        kicker: "Objectives", heading: "What COP Mashinani sets out to do",
+        heading: "What COP Mashinani sets out to do",
         items: [
           { title: "Empowering grassroots voices", body: "Creating a platform where women from local communities speak for themselves on climate." },
           { title: "Localising climate solutions", body: "Turning global commitments into actions that make sense in Kajiado and beyond." },
           { title: "Building resilient communities", body: "Sharing practical approaches to adaptation, livelihoods and peace." },
         ],
       }),
-      S("split", {
-        kicker: "24 November 2023 · Isinya Town Hall, Kajiado", heading: "COP28 Mashinani.",
-        body: "Our first COP Mashinani brought together Maasai women leaders, county officials, partners and young people in Isinya ahead of COP28.\n\nThe conversation ran on three themes:\n\n- Sustainability and localising climate solutions\n- Community collaboration for climate justice\n- Voices of change: empowering women in climate action",
-        image: "/images/cop28.jpeg", cta: { label: "Read: Voices of Resilience", href: "/news" }, reverse: true,
-      }),
+      S("photoPair", { heading: "COP28 Mashinani, 24 November 2023", imageA: "/images/cop28.jpeg", imageB: "/images/cop-1.jpeg", body: "Our first COP Mashinani brought together Maasai women leaders, county officials, partners and young people in Isinya ahead of COP28.\n\nThe conversation ran on three themes:\n\n- Sustainability and localising climate solutions\n- Community collaboration for climate justice\n- Voices of change: empowering women in climate action", link: { label: "Read: Voices of Resilience", href: "/news" } }),
       S("gallery", {
-        kicker: "Gallery", heading: "Isinya, *2023*.",
+        heading: "Isinya, 2023.",
         items: [
           { image: "/images/cop-1.jpeg", caption: "Opening session", place: "Isinya" },
           { image: "/images/cop-2.jpeg", caption: "Women leaders' panel", place: "Isinya" },
@@ -182,19 +177,32 @@ const pages = [
     ],
   },
   {
+    slug: "our-people", title: "Our people", seo: "The people who lead WOPCAA.",
+    sections: [
+      S("pageHeader", { title: "The people behind WOPCAA.", intro: "Professionals and community leaders who put their expertise to work for those most exposed to the climate crisis: experts for the vulnerable.", image: "/images/about.jpeg" }),
+      S("team", {
+        heading: "Leadership", intro: "",
+        items: [
+          { name: "Dr. Skitter Wangeci Mbugua", role: "Executive Director", photo: "", bio: "PhD, MBA, CPM, HSC. Leads WOPCAA's strategy and partnerships, and writes on climate resilience, peace and women's leadership." },
+        ],
+      }),
+      S("cta", { heading: "Lend your expertise.", body: "WOPCAA's board and secretariat grow from its members. Join as an individual or organisation.", primary: { label: "Become a member", href: "/membership" }, secondary: { label: "Contact us", href: "/contact" }, tone: "sand" }),
+    ],
+  },
+  {
     slug: "membership", title: "Membership", seo: "Join WOPCAA as an individual or organisation member.",
     sections: [
-      S("pageHeader", { kicker: "Get involved", title: "Join a community of *experts* for the vulnerable.", intro: "Members bring their skills to women and communities on the frontline of climate change, and help shape where WOPCAA goes next.", image: "" }),
+      S("pageHeader", { title: "Join a community of experts for the vulnerable.", intro: "Members bring their skills to women and communities on the frontline of climate change, and help shape where WOPCAA goes next.", image: "" }),
       S("tiers", {
-        kicker: "Membership", heading: "Two ways to join", intro: "Fees support grassroots programmes and the running of the association.",
+        heading: "Two ways to join", intro: "Fees support grassroots programmes and the running of the association.",
         items: [
           { name: "Individual", price: "KSh 5,000", note: "Joining fee, then KSh 3,000 a year", features: "Vote at the general meeting\nJoin thematic working groups\nInvitations to trainings and COP Mashinani\nMember directory listing", cta: { label: "Apply now", href: "#apply" }, featured: false },
           { name: "Organisation", price: "KSh 10,000", note: "Joining fee, then KSh 5,000 a year", features: "Everything in Individual\nPartner on joint programmes\nFeature your work in our media centre\nTwo named representatives", cta: { label: "Apply now", href: "#apply" }, featured: true },
         ],
       }),
-      S("form", { kicker: "Apply", heading: "Apply for membership", intro: "Tell us a little about yourself or your organisation. Our secretariat will get in touch with the next steps and payment details." }),
+      S("form", { heading: "Apply for membership", intro: "Tell us a little about yourself or your organisation. Our secretariat will get in touch with the next steps and payment details." }),
       S("faq", {
-        kicker: "Questions", heading: "Before you apply",
+        heading: "Before you apply",
         items: [
           { q: "Who can join?", a: "Women and men professionals, community leaders and organisations who share our vision of an Africa where women lead climate action." },
           { q: "How do I pay?", a: "Once your application is reviewed, the secretariat will send you payment details." },
@@ -206,15 +214,15 @@ const pages = [
   {
     slug: "contact", title: "Contact", seo: "Get in touch with WOPCAA.",
     sections: [
-      S("contact", { kicker: "Contact us", heading: "Let's talk.", intro: "For partnerships, media, membership or anything else. If you need to report abuse, please use the safe reporting form instead." }),
-      S("reportCta", { kicker: "Need help now?", heading: "Report abuse safely, anonymously if you choose.", body: "", showHotlines: true }),
+      S("contact", { heading: "Let's talk.", intro: "For partnerships, media, membership or anything else. If you need to report abuse, please use the safe reporting form instead." }),
+      S("reportCta", { heading: "Report abuse safely, anonymously if you choose.", body: "", showHotlines: true }),
     ],
   },
   {
     slug: "privacy", title: "Privacy", seo: "How WOPCAA protects the information you share.",
     sections: [
       S("richText", {
-        kicker: "Privacy", heading: "How we protect what you share.", narrow: true,
+        heading: "How we protect what you share.", narrow: true,
         body: "## Reports\n\nWhat you write in a report, your location details and your contact details are encrypted before they are stored. Only members of the WOPCAA case team can read them, and every time a report is opened it is logged.\n\nYou can report **anonymously**. We do not ask for your name, and we do not store your IP address with the report. You receive a reference and a private key; we keep only a one-way fingerprint of the key, so we cannot recover it for you.\n\n## Sharing\n\nWe share a report with a partner, such as a legal aid clinic or shelter, only if you say we may, and we ask before sharing names.\n\n## Accounts\n\nIf you create an account, we store your email address and the name you choose. You can use a nickname.\n\n## Newsletter and contact forms\n\nWe use your email only to reply or to send the newsletter you signed up for. Write to info@wopcaa.org to be removed.",
       }),
     ],

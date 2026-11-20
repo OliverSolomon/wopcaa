@@ -31,8 +31,9 @@ function bootstrapRole(email: string): Role {
  */
 export async function getViewer(): Promise<Viewer | null> {
   const { data: session } = await auth.getSession();
-  const user = session?.user;
-  if (!user) return null;
+  const user = session?.user as ({ id: string; email: string; name: string; banned?: boolean | null }) | undefined;
+  // A suspended account is treated as signed out everywhere, even if a session cookie is still around.
+  if (!user || user.banned) return null;
   let profile = await one<{ role: Role; full_name: string | null }>(
     "select role, full_name from profiles where user_id = $1",
     [user.id],

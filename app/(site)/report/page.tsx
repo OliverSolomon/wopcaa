@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Lock, PhoneCall, ShieldCheck } from "lucide-react";
+import { Lock, PhoneCall, ShieldCheck, LogOut } from "lucide-react";
 import { getSettings } from "@/lib/content/queries";
 import { getViewer } from "@/lib/session";
 import { Container } from "@/components/sections/parts";
-import { RevealText } from "@/components/motion/motion";
 import { QuickExit } from "@/components/site/quick-exit";
 import { ReportForm } from "@/components/report/report-form";
 
@@ -20,26 +19,25 @@ export default async function ReportPage() {
   return (
     <>
       <QuickExit />
-      <section className="pb-28 pt-36 md:pt-44">
-        <Container className="grid gap-14 lg:grid-cols-12">
+      <section className="pb-24 pt-28 md:pt-36">
+        <Container className="grid gap-12 lg:grid-cols-12">
           <aside className="lg:col-span-4">
-            <div className="lg:sticky lg:top-32">
-              <p className="kicker text-ink-500">Safe reporting</p>
-              <RevealText as="h1" text="You are not *alone*." className="display mt-6 text-[3rem] md:text-[4.6rem]" />
-              <p className="mt-6 text-lg leading-relaxed text-ink-500">Tell us what happened. A trained member of our case team reads every report and will help you find support.</p>
-              <ul className="mt-10 grid gap-4 text-[15px]">
-                <li className="flex gap-3"><Lock className="mt-0.5 size-5 shrink-0 text-moss-600" /> Encrypted before it is stored</li>
-                <li className="flex gap-3"><ShieldCheck className="mt-0.5 size-5 shrink-0 text-moss-600" /> Anonymous if you choose, no name needed</li>
-                <li className="flex gap-3"><span className="kicker mt-1 shrink-0 rounded bg-ink-900 px-1.5 py-0.5 text-[9px] text-white">ESC×2</span> Press Escape twice to leave instantly</li>
+            <div className="lg:sticky lg:top-28">
+              <h1 className="t-h1">You are not alone.</h1>
+              <p className="t-lead mt-5">Tell us what happened. A trained case worker reads every report.</p>
+              <ul className="mt-8 grid gap-4">
+                <li className="flex gap-3"><Lock className="mt-1 size-5 shrink-0 text-green" /> What you write is encrypted before it is stored.</li>
+                <li className="flex gap-3"><ShieldCheck className="mt-1 size-5 shrink-0 text-green" /> You can report without giving your name.</li>
+                <li className="flex gap-3"><LogOut className="mt-1 size-5 shrink-0 text-green" /> Press Escape twice, or the button at the bottom, to leave this site at once.</li>
               </ul>
               {settings.hotlines.length ? (
-                <div className="mt-10 rounded-3xl bg-forest-900 p-6 text-sand-50">
-                  <p className="kicker flex items-center gap-2 text-sand-300/70"><PhoneCall className="size-3.5" /> In danger now? Call</p>
-                  <ul className="mt-4 grid gap-3">
+                <div className="mt-8 rounded-[20px] bg-coral-soft p-6">
+                  <p className="flex items-center gap-2 font-semibold"><PhoneCall className="size-4 text-coral-ink" /> In danger right now? Call</p>
+                  <ul className="mt-3 grid gap-2.5">
                     {settings.hotlines.map((h) => (
                       <li key={h.number} className="flex items-baseline justify-between gap-3">
-                        <span className="text-sm text-sand-200/80">{h.label}</span>
-                        <a className="font-display text-2xl" href={`tel:${h.number.replace(/\s/g, "")}`}>{h.number}</a>
+                        <span className="text-slate">{h.label}</span>
+                        <a className="text-2xl font-semibold text-coral-ink" href={`tel:${h.number.replace(/\s/g, "")}`}>{h.number}</a>
                       </li>
                     ))}
                   </ul>
@@ -48,7 +46,7 @@ export default async function ReportPage() {
             </div>
           </aside>
           <div className="lg:col-span-8">
-            <Suspense fallback={<div className="h-[640px] animate-pulse rounded-[28px] bg-sand-100" />}>
+            <Suspense fallback={<div className="h-[640px] animate-pulse rounded-[20px] bg-mist-deep" />}>
               <FormWithViewer hotlines={settings.hotlines} />
             </Suspense>
           </div>

@@ -9,10 +9,10 @@ export function Thread({ items, side, dash }: { items: ThreadItem[]; side: "repo
       {items.map((m) => {
         if (m.kind === "status" || m.kind === "assignment" || m.author_kind === "system") {
           return (
-            <li key={m.id} className={cn("flex items-center gap-3 text-xs", dash ? "faint" : "text-ink-400")}>
-              <span className={cn("h-px flex-1", dash ? "bg-[var(--d-border)]" : "bg-ink-900/10")} />
+            <li key={m.id} className={cn("flex items-center gap-3 text-xs", dash ? "faint" : "text-slate-soft")}>
+              <span className={cn("h-px flex-1", dash ? "bg-[var(--d-border)]" : "bg-forest/10")} />
               <span className="max-w-[70%] text-center">{m.body} · {formatDate(m.created_at, { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" })}</span>
-              <span className={cn("h-px flex-1", dash ? "bg-[var(--d-border)]" : "bg-ink-900/10")} />
+              <span className={cn("h-px flex-1", dash ? "bg-[var(--d-border)]" : "bg-forest/10")} />
             </li>
           );
         }
@@ -24,7 +24,7 @@ export function Thread({ items, side, dash }: { items: ThreadItem[]; side: "repo
               "max-w-[85%] rounded-2xl px-4 py-3",
               note ? "border border-dashed border-[var(--d-ochre)] bg-[var(--d-ochre-soft)]" :
               dash ? (mine ? "bg-[var(--d-accent)] text-[var(--d-panel)]" : "bg-[var(--d-panel-2)] border border-[var(--d-border)]") :
-              mine ? "bg-forest-900 text-sand-50" : "bg-white",
+              mine ? "bg-forest text-mist" : "bg-white",
             )}>
               <p className={cn("mb-1 text-[11px] font-semibold opacity-70")}>
                 {note ? "Internal note · " : ""}{m.author_kind === "admin" ? (m.author_name || "Case team") : side === "reporter" ? "You" : "Reporter"}
