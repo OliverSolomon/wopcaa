@@ -58,7 +58,8 @@ export const SECTION_DEFS: SectionDef[] = [
     icon: "Clapperboard",
     fields: [
       { name: "scenes", label: "Scenes", type: "list", itemLabel: "line", of: [
-        { name: "image", label: "Photo", type: "image" },
+        { name: "image", label: "Photo (also the video's poster)", type: "image" },
+        { name: "video", label: "Video (optional)", type: "text", help: "Link to an MP4 or WebM, or upload one in Media. Plays muted and looping; people who turn off motion see the photo." },
         { name: "line", label: "On-screen line", type: "text", help: "Short and in the present tense, like a film subtitle" },
         { name: "sub", label: "Supporting sentence", type: "textarea", rows: 2 },
         { name: "note", label: "Source or caption", type: "text" },

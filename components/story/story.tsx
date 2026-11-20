@@ -9,7 +9,7 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export type Scene = { image: string; line: string; sub?: string; note?: string; weather?: "none" | "rain" | "embers" | "seeds" };
+export type Scene = { image: string; video?: string; line: string; sub?: string; note?: string; weather?: "none" | "rain" | "embers" | "seeds" };
 type Weather = NonNullable<Scene["weather"]>;
 
 /**
@@ -67,7 +67,11 @@ export function Story({ scenes, ending }: { scenes: Scene[]; ending?: { line: st
         {scenes.map((s, i) => (
           <div key={i} data-shot className="inset-0 motion-safe:absolute motion-reduce:relative motion-reduce:h-[100svh]">
             <div data-cam className="absolute inset-0 will-change-transform">
-              <Image src={s.image} alt="" fill sizes="100vw" priority={i === 0} className="object-cover" />
+              {s.video ? (
+                // Real footage when there is some: muted, looping, inline, with the photo as its poster.
+                <video src={s.video} poster={s.image} autoPlay muted loop playsInline preload={i === 0 ? "auto" : "metadata"} className="absolute inset-0 size-full object-cover motion-reduce:hidden" aria-hidden />
+              ) : null}
+              <Image src={s.image} alt="" fill sizes="100vw" priority={i === 0} className={s.video ? "object-cover motion-safe:hidden" : "object-cover"} />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/45 to-forest/20" />
             <div data-line className="absolute inset-x-0 bottom-0 mx-auto max-w-[1200px] px-5 pb-24 md:px-8 md:pb-28">

@@ -11,7 +11,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
  *  evidence private: files attached to reports, readable only through a signed link the case team requests
  */
 export const BUCKETS = {
-  media: { public: true, maxMb: 15, types: /^image\/(png|jpe?g|webp|gif|svg\+xml|avif)$/ },
+  media: { public: true, maxMb: 80, types: /^(image\/(png|jpe?g|webp|gif|svg\+xml|avif)|video\/(mp4|webm))$/ },
   evidence: { public: false, maxMb: 20, types: /^(image\/(png|jpe?g|webp|heic)|application\/pdf|audio\/(mpeg|mp4|ogg|webm|wav)|video\/(mp4|webm|quicktime))$/ },
 } as const;
 export type Bucket = keyof typeof BUCKETS;

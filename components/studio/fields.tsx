@@ -178,7 +178,7 @@ export function MediaPicker({ onClose, onPick }: { onClose: () => void; onPick: 
           <div className="flex items-center gap-2">
             <label className={cn("btn btn-primary cursor-pointer", busy && "pointer-events-none opacity-60")}>
               {busy ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />} Upload
-              <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => upload(e.target.files)} />
+              <input type="file" accept="image/*,video/mp4,video/webm" multiple className="sr-only" onChange={(e) => upload(e.target.files)} />
             </label>
             <button onClick={onClose} className="btn btn-ghost !px-2" aria-label="Close"><X className="size-4" /></button>
           </div>

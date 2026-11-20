@@ -28,8 +28,8 @@ export function MediaLibrary({ items }: { items: Item[] }) {
     <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
       <div>
         <label className={cn("panel mb-4 flex cursor-pointer items-center justify-center gap-3 border-dashed p-6 text-sm font-semibold text-[var(--d-accent)]", busy && "pointer-events-none opacity-60")}>
-          {busy ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />} Upload images (up to 15 MB each)
-          <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => upload(e.target.files)} />
+          {busy ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />} Upload images or videos (up to 80 MB each)
+          <input type="file" accept="image/*,video/mp4,video/webm" multiple className="sr-only" onChange={(e) => upload(e.target.files)} />
         </label>
         {error ? <p className="mb-4 text-sm text-[var(--d-ochre)]">{error}</p> : null}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
