@@ -43,6 +43,16 @@ html { background: var(--color-mist); color: var(--color-forest); }
 /* A soft brand glow behind a group of photos. */
 .glow-leaf { background: radial-gradient(closest-side, rgb(27 174 112 / 0.16), rgb(27 174 112 / 0) 100%); }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes shadowPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.92); opacity: .75; } }
+@keyframes flap { from { transform: rotate(0deg); } to { transform: rotate(28deg); } }
+@keyframes drift { from { transform: translate(0, 0); } to { transform: translate(18px, -8px); } }
+@keyframes cloudDrift { from { transform: translateX(-12px); } to { transform: translateX(12px); } }
+@keyframes pinPulse { 0% { r: 7; opacity: .6; } 100% { r: 20; opacity: 0; } }
+
+/* The daylight haze behind illustrated sections: a soft sky, warm toward the ground. */
+.haze { background: radial-gradient(120% 70% at 50% 0%, #dcebf0 0%, rgb(220 235 240 / 0) 60%), linear-gradient(180deg, #eef4f1 0%, #f4f6f4 55%, #f3eee2 100%); }
 body { font-family: var(--font-sans); background: var(--color-mist); font-size: 1.0625rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
 ::selection { background: var(--color-leaf-soft); color: var(--color-forest); }

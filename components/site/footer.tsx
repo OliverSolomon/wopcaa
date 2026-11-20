@@ -2,12 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 import type { SiteSettings } from "@/lib/content/schema";
 import { NewsletterForm } from "./forms";
+import { Horizon } from "@/components/doodles/kajiado";
 
 export async function Footer({ settings }: { settings: SiteSettings }) {
   "use cache";
   const year = new Date().getFullYear();
   return (
-    <footer className="mt-10 bg-forest text-mist">
+    <footer className="mt-16 text-mist">
+      <Horizon className="block h-[90px] w-full md:h-[140px]" />
+      <div className="bg-forest">
       <div className="mx-auto max-w-[1200px] px-5 pb-10 pt-16 md:px-8 md:pt-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
@@ -53,6 +56,7 @@ export async function Footer({ settings }: { settings: SiteSettings }) {
             <Link href="/sign-in" className="hover:text-white">Staff sign in</Link>
           </p>
         </div>
+      </div>
       </div>
     </footer>
   );

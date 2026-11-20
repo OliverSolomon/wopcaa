@@ -88,13 +88,14 @@ const pages = [
       }),
       S("impact", {
         heading: "Why this work matters",
-        intro: "In the places we work, violence against women and the climate crisis feed each other. These are the national figures we start from.",
+        intro: "In Kajiado, violence against women and the climate crisis feed each other. Each figure is pinned to where it lands.",
         items: [
-          { value: "34%", label: "of women aged 15 to 49 have experienced physical violence since age 15" },
-          { value: "13%", label: "of women aged 15 to 49 have experienced sexual violence" },
-          { value: "15%", label: "of women aged 15 to 49 have undergone female genital mutilation" },
+          { value: "34%", label: "of women aged 15 to 49 have experienced physical violence since age 15", place: "women", source: "Kenya Demographic and Health Survey 2022" },
+          { value: "13%", label: "of women aged 15 to 49 have experienced sexual violence", place: "home", source: "Kenya Demographic and Health Survey 2022" },
+          { value: "20,000+", label: "families displaced by the 2024 floods in Kenya", place: "water", source: "Kenya Disaster Response Unit, 2024" },
+          { value: "15%", label: "of women aged 15 to 49 have undergone female genital mutilation", place: "acacia", source: "Kenya Demographic and Health Survey 2022" },
         ],
-        source: "Kenya Demographic and Health Survey 2022, Kenya National Bureau of Statistics",
+        source: "",
       }),
       S("gallery", {
         heading: "From the grassroots",
@@ -110,6 +111,11 @@ const pages = [
         heading: "You are not alone. Tell us what happened.",
         body: "If you have experienced violence or abuse, including violence linked to land, water or conflict, our case team will listen and connect you to support. You can report without giving your name.",
         showHotlines: true,
+      }),
+      S("involve", {
+        heading: "Plant something that lasts.",
+        body: "Join as a member, lend your skills, or partner with us to take COP Mashinani to more counties.",
+        primary: { label: "Become a member", href: "/membership" }, secondary: { label: "Partner with us", href: "/contact" },
       }),
       S("county", { heading: "Your county. Your next step.", intro: "Wherever you are in Kenya, there is something you can do today." }),
       S("posts", { heading: "News and articles", kind: "all", limit: 3 }),

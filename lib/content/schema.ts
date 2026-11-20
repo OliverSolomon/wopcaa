@@ -85,6 +85,14 @@ export const SECTION_DEFS: SectionDef[] = [
     defaults: { heading: "", imageA: "", imageB: "", body: "", link: { label: "", href: "" } },
   },
   {
+    type: "involve",
+    title: "Get involved",
+    description: "Women planting an acacia beside a short invitation and two buttons",
+    icon: "Sprout",
+    fields: [{ name: "heading", label: "Heading", type: "text" }, { name: "body", label: "Text", type: "textarea" }, { name: "primary", label: "Main button", type: "link" }, { name: "secondary", label: "Second button", type: "link" }],
+    defaults: { heading: "", body: "", primary: { label: "", href: "" }, secondary: { label: "", href: "" } },
+  },
+  {
     type: "county",
     title: "Your county (interactive)",
     description: "Visitors pick their county and get the actions they can take from there, with forms filled in",
@@ -113,14 +121,19 @@ export const SECTION_DEFS: SectionDef[] = [
   },
   {
     type: "impact",
-    title: "Why it matters (figures)",
-    description: "Dark band with figures, each from a named source, beside the interactive globe",
+    title: "Why it matters (island)",
+    description: "An illustrated island of Kajiado with facts pinned to the places they happen",
     icon: "BarChart3",
     fields: [
       { name: "heading", label: "Heading", type: "text" },
       { name: "intro", label: "Intro", type: "textarea" },
-      { name: "items", label: "Figures", type: "list", itemLabel: "label", of: [{ name: "value", label: "Figure", type: "text" }, { name: "label", label: "What it measures", type: "text" }] },
-      { name: "source", label: "Source line", type: "text", help: "Always name where the figures come from" },
+      { name: "items", label: "Facts (up to four)", type: "list", itemLabel: "label", of: [
+        { name: "value", label: "Figure", type: "text" },
+        { name: "label", label: "What it measures", type: "text" },
+        { name: "place", label: "Pin it to", type: "select", options: [{ value: "women", label: "The women" }, { value: "home", label: "The homestead" }, { value: "water", label: "The water pan" }, { value: "turbine", label: "The wind turbine" }, { value: "mountain", label: "Kilimanjaro" }, { value: "acacia", label: "The acacia" }] },
+        { name: "source", label: "Source", type: "text", help: "Always name where the figure comes from" },
+      ] },
+      { name: "source", label: "Default source", type: "text", help: "Used for facts without their own source" },
     ],
     defaults: { heading: "", intro: "", items: [], source: "" },
   },

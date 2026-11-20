@@ -8,6 +8,8 @@ import { formatDate, cn } from "@/lib/utils";
 import { HorizontalScroller, HeroIn, ParallaxImage } from "@/components/motion/motion";
 import { LazyScene } from "@/components/three/lazy-scene";
 import { Motif } from "@/components/motifs/motifs";
+import { IslandFacts, type Fact } from "@/components/doodles/island-facts";
+import { Cloud, PlantingScene } from "@/components/doodles/kajiado";
 import { ContactForm, MembershipForm } from "@/components/site/forms";
 import { HeroFrame, Figure } from "./hero-frame";
 import { Story, type Scene } from "@/components/story/story";
@@ -137,31 +139,32 @@ export function Bento({ data }: { data: S<{ heading?: string; intro?: string; it
   );
 }
 
-/* ───────────── Why it matters: sourced figures beside the globe ───────────── */
+/* ───────────── Why it matters: sourced facts pinned to the places they happen ───────────── */
 export function Impact({ data }: { data: S<{ heading?: string; intro?: string; items?: unknown; source?: string }> }) {
-  const items = list<{ value: string; label: string }>(data.items);
+  const facts = list<Fact>(data.items).map((f) => ({ ...f, source: f.source || s(data.source) || undefined }));
+  return <IslandFacts heading={data.heading} intro={data.intro} facts={facts} />;
+}
+
+/* ───────────── Get involved, with women planting an acacia ───────────── */
+export function Involve({ data }: { data: S<{ heading?: string; body?: string; primary?: LinkT; secondary?: LinkT }> }) {
   return (
-    <section className="relative isolate overflow-hidden bg-forest py-20 text-mist md:py-28">
-      <Container className="grid items-center gap-12 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <h2 className="t-h2 max-w-[20ch]">{data.heading}</h2>
-          {data.intro ? <p className="mt-5 max-w-[52ch] text-lg leading-relaxed text-mist/75">{data.intro}</p> : null}
-          <dl className="mt-12 grid gap-8 sm:grid-cols-3">
-            {items.map((f, i) => (
-              <div key={i} className="border-t border-mist/20 pt-5">
-                <dt className="sr-only">{f.label}</dt>
-                <dd className="text-[3rem] font-semibold leading-none tracking-tight text-white"><Figure value={f.value} /></dd>
-                <dd className="mt-3 text-[0.95rem] leading-snug text-mist/75">{f.label}</dd>
-              </div>
-            ))}
-          </dl>
-          {data.source ? <p className="mt-10 text-sm text-mist/55">Source: {data.source}</p> : null}
-        </div>
-        <div className="relative h-[360px] lg:col-span-5 lg:h-[480px]">
-          <LazyScene variant="globe" className="absolute inset-0" />
-          <p className="pointer-events-none absolute bottom-0 left-0 right-0 text-center text-sm text-mist/50">Drag to turn the globe</p>
-        </div>
-      </Container>
+    <section className="px-3 py-3 md:px-5">
+      <div className="haze relative overflow-hidden rounded-[28px]">
+        <Cloud className="pointer-events-none absolute left-[38%] top-8 w-28 opacity-90 [animation:cloudDrift_16s_ease-in-out_infinite_alternate] motion-reduce:[animation:none]" />
+        <Container className="grid items-center gap-8 py-14 md:grid-cols-12 md:py-16">
+          <div className="md:col-span-6">
+            <PlantingScene className="mx-auto w-full max-w-[520px]" />
+          </div>
+          <div className="md:col-span-5 md:col-start-8">
+            <h2 className="t-h2">{data.heading}</h2>
+            {data.body ? <p className="mt-4 text-lg text-slate">{data.body}</p> : null}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button link={data.primary} />
+              <Button link={data.secondary} variant="outline" />
+            </div>
+          </div>
+        </Container>
+      </div>
     </section>
   );
 }
@@ -590,7 +593,7 @@ function CountySection({ data, settings }: { data: S<{ heading?: string; intro?:
 }
 
 const MAP: Record<string, (p: { data: any; settings: SiteSettings }) => React.ReactNode> = {
-  story: StorySection, county: CountySection, photoPair: PhotoPair,
+  story: StorySection, county: CountySection, photoPair: PhotoPair, involve: Involve,
   heroMedia: HeroMedia, hero3d: Hero3D, pageHeader: PageHeader, bento: Bento, impact: Impact, team: Team,
   statement: Statement, pillars: Pillars, parallaxBanner: ParallaxBanner, stats: Stats, gallery: Gallery, split: Split,
   values: Values, richText: RichText, timeline: Timeline, tiers: Tiers, partners: Partners, posts: Posts, faq: Faq,
