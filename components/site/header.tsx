@@ -67,7 +67,7 @@ export function Header({ settings }: { settings: SiteSettings; darkTop?: string[
             <Link href={session?.user ? "/go" : "/sign-in"} className="hidden rounded-lg px-3 py-2 text-[0.95rem] hover:text-green md:block">
               {session?.user ? "My account" : "Sign in"}
             </Link>
-            <Link href="/report" className="inline-flex min-h-11 items-center rounded-full bg-coral px-5 text-[0.95rem] font-semibold text-forest transition-[background-color,transform] hover:bg-coral-hover active:translate-y-px">
+            <Link href="/report" className="inline-flex min-h-11 items-center rounded-full bg-coral px-5 text-[0.95rem] font-semibold text-white transition-[background-color,transform] hover:bg-coral-hover active:translate-y-px">
               Report abuse
             </Link>
             <button onClick={() => setOpen((o) => !o)} className="rounded-lg p-2.5 lg:hidden" aria-label="Menu" aria-expanded={open}>

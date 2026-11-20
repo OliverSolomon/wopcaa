@@ -304,7 +304,7 @@ export function ReportForm({ viewer, hotlines }: { viewer: Viewer; hotlines: { l
           {step < STEPS.length - 1 ? (
             <button type="button" onClick={next} className="inline-flex items-center gap-2 rounded-full bg-forest px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-forest-soft">Continue <ArrowRight className="size-4" /></button>
           ) : (
-            <button type="button" onClick={submit} disabled={pending || uploading} className="inline-flex items-center gap-2 rounded-full bg-coral px-7 py-3.5 text-sm font-semibold text-forest transition hover:bg-coral-hover disabled:opacity-60">
+            <button type="button" onClick={submit} disabled={pending || uploading} className="inline-flex items-center gap-2 rounded-full bg-coral px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-coral-hover disabled:opacity-60">
               {pending ? <Loader2 className="size-4 animate-spin" /> : <ShieldCheck className="size-4" />} Send report securely
             </button>
           )}

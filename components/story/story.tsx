@@ -84,7 +84,7 @@ export function Story({ scenes, ending }: { scenes: Scene[]; ending?: { line: st
               <p className="mx-auto max-w-[20ch] text-[clamp(2.2rem,5.5vw,4.4rem)] font-semibold leading-[1.05]">{ending.line}</p>
               <div className="mt-10 flex flex-wrap justify-center gap-3">
                 {ending.primary?.label ? <Link href={ending.primary.href} className="inline-flex min-h-12 items-center rounded-full bg-mist px-6 font-semibold text-forest hover:bg-white">{ending.primary.label}</Link> : null}
-                {ending.secondary?.label ? <Link href={ending.secondary.href} className="inline-flex min-h-12 items-center rounded-full bg-coral px-6 font-semibold text-forest hover:bg-coral-hover">{ending.secondary.label}</Link> : null}
+                {ending.secondary?.label ? <Link href={ending.secondary.href} className="inline-flex min-h-12 items-center rounded-full bg-coral px-6 font-semibold text-white hover:bg-coral-hover">{ending.secondary.label}</Link> : null}
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@ function WeatherLayer({ mode }: { mode: React.RefObject<Weather> }) {
         }
         if (mix.seeds > 0.01) {
           p.y -= dt * 0.035 * p.v; p.x += Math.sin(now / 1400 + p.s * 6) * dt * 0.015;
-          ctx.fillStyle = `rgba(27,174,112,${0.6 * mix.seeds * p.s})`;
+          ctx.fillStyle = `rgba(201,165,90,${0.6 * mix.seeds * p.s})`;
           ctx.beginPath(); ctx.ellipse(p.x * w, p.y * h, 1.4 + p.s * 2, 0.8 + p.s, p.s * 3, 0, Math.PI * 2); ctx.fill();
         }
         if (p.y > 1.05) { p.y = -0.05; p.x = Math.random(); }

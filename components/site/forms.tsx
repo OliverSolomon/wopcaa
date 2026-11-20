@@ -71,7 +71,7 @@ export function MembershipForm() {
       </div>
       <textarea name="message" rows={4} placeholder="Tell us about your work and why you'd like to join" className={field} />
       <Status state={state} />
-      <button disabled={pending} className="inline-flex w-fit items-center gap-2 rounded-full bg-coral px-6 py-3.5 text-sm font-semibold text-forest transition hover:bg-coral-hover disabled:opacity-60">
+      <button disabled={pending} className="inline-flex w-fit items-center gap-2 rounded-full bg-coral px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-coral-hover disabled:opacity-60">
         {pending ? <Loader2 className="size-4 animate-spin" /> : null} Submit application <ArrowRight className="size-4" />
       </button>
     </form>

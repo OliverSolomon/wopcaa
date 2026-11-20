@@ -12,9 +12,9 @@ import { useEffect, useRef } from "react";
 type Ctx = { ctx: CanvasRenderingContext2D; w: number; h: number; t: number; px: number | null; py: number | null; dt: number };
 type Draw = (c: Ctx) => void;
 
-const FOREST = "#14261c";
-const GREEN = "#06752e";
-const LEAF = "#1bae70";
+const FOREST = "#252b21";
+const GREEN = "#4c5f2b";
+const LEAF = "#8a9a52";
 
 function useCanvas(setup: (w: number, h: number) => Draw, className?: string) {
   const ref = useRef<HTMLCanvasElement>(null);

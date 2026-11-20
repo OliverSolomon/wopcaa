@@ -28,7 +28,7 @@ export function Button({ link, variant = "primary", className }: { link?: LinkT 
   if (!hasLink(link)) return null;
   const styles = {
     primary: "bg-green text-white hover:bg-green-hover",
-    safety: "bg-coral text-forest hover:bg-coral-hover",
+    safety: "bg-coral text-white hover:bg-coral-hover",
     outline: "border border-forest/25 text-forest hover:border-forest/60",
     onDark: "bg-mist text-forest hover:bg-white",
   }[variant];

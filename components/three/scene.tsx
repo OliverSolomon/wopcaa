@@ -95,7 +95,7 @@ function Globe() {
   }, []);
   const uniforms = useMemo(() => ({
     uTime: { value: 0 }, uPointer: { value: new THREE.Vector2() }, uPixel: { value: Math.min(window.devicePixelRatio, 2) },
-    uA: { value: new THREE.Color("#1bae70") }, uB: { value: new THREE.Color("#e3f4ea") }, uC: { value: new THREE.Color("#e4a196") },
+    uA: { value: new THREE.Color("#9aab63") }, uB: { value: new THREE.Color("#ece9da") }, uC: { value: new THREE.Color("#e4a196") },
   }), []);
   const ringUniforms = useMemo(() => ({ ...uniforms, uA: { value: new THREE.Color("#e4a196") }, uB: { value: new THREE.Color("#f4f6f4") } }), [uniforms]);
 
@@ -165,7 +165,7 @@ function Field({ light }: { light?: boolean }) {
   }, []);
   const uniforms = useMemo(() => ({
     uTime: { value: 0 }, uPointer: { value: new THREE.Vector2() }, uPixel: { value: Math.min(window.devicePixelRatio, 2) },
-    uA: { value: new THREE.Color(light ? "#b9e3cc" : "#06752e") }, uB: { value: new THREE.Color(light ? "#1bae70" : "#e4a196") },
+    uA: { value: new THREE.Color(light ? "#d9d7c0" : "#4c5f2b") }, uB: { value: new THREE.Color(light ? "#8a9a52" : "#c9a55a") },
   }), [light]);
   useFrame((state, dt) => {
     uniforms.uTime.value += dt;

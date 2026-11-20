@@ -40,9 +40,9 @@ export function IslandFacts({ heading, intro, facts }: { heading?: string; intro
               return (
                 <g key={i} className="hidden md:inline">
                   <path d={`M${f.slot.joint.x} ${f.slot.joint.y} C ${(f.slot.joint.x + a.x) / 2} ${f.slot.joint.y}, ${(f.slot.joint.x + a.x) / 2} ${a.y}, ${a.x} ${a.y}`}
-                    stroke={on ? "#06752e" : "#14261c"} strokeOpacity={on ? 0.9 : 0.35} strokeWidth={on ? 1.6 : 1} strokeDasharray={on ? "0" : "3 4"} fill="none" />
-                  <circle cx={a.x} cy={a.y} r="7" fill="#06752e" opacity=".5" className="motion-safe:[animation:pinPulse_2.4s_ease-out_infinite]" />
-                  <circle cx={a.x} cy={a.y} r="5" fill="#fff" stroke="#06752e" strokeWidth="2.5" />
+                    stroke={on ? "#4c5f2b" : "#252b21"} strokeOpacity={on ? 0.9 : 0.35} strokeWidth={on ? 1.6 : 1} strokeDasharray={on ? "0" : "3 4"} fill="none" />
+                  <circle cx={a.x} cy={a.y} r="7" fill="#4c5f2b" opacity=".45" className="motion-safe:[animation:pinPulse_2.4s_ease-out_infinite]" />
+                  <circle cx={a.x} cy={a.y} r="5" fill="#fff" stroke="#4c5f2b" strokeWidth="2.5" />
                 </g>
               );
             })}
@@ -53,7 +53,7 @@ export function IslandFacts({ heading, intro, facts }: { heading?: string; intro
             <button key={i} type="button"
               onMouseEnter={() => setActive(i)} onMouseLeave={() => setActive(null)} onFocus={() => setActive(i)} onBlur={() => setActive(null)}
               className={cn(
-                "absolute hidden w-[25%] rounded-2xl border border-white/70 bg-white/65 p-4 text-left shadow-[0_18px_40px_-24px_rgb(20_38_28/0.45)] backdrop-blur-md transition-[transform,border-color] duration-300 md:block lg:p-5",
+                "absolute hidden w-[25%] rounded-2xl border border-white/70 bg-white/65 p-4 text-left shadow-[0_18px_40px_-24px_rgb(37_43_33/0.4)] backdrop-blur-md transition-[transform,border-color] duration-300 md:block lg:p-5",
                 active === i && "-translate-y-1 border-green/40",
               )}
               style={f.slot.card}>
