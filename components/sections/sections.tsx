@@ -85,12 +85,12 @@ function BentoCard({ c, wide }: { c: Card; wide: boolean }) {
   const photo = c.motif === "photo";
   const inner = (
     <article className={cn(
-      "group relative flex h-full min-h-[340px] overflow-hidden rounded-[20px] border",
+      "group relative flex h-full min-h-[420px] overflow-hidden rounded-[20px] border",
       photo ? "border-forest bg-forest text-mist" : c.motif === "justice" ? "border-line bg-mist-deep" : "border-line bg-white",
       wide ? "flex-col md:flex-row" : "flex-col",
     )}>
       {!photo ? (
-        <div className={cn("relative", wide ? "order-2 h-48 md:order-none md:h-auto md:w-1/2" : "h-44")}>
+        <div className={cn("relative overflow-hidden", wide ? "order-2 h-60 md:order-none md:h-auto md:w-[55%]" : "h-60")}>
           <Motif kind={(c.motif as "peace" | "justice" | "climate") ?? "climate"} className="absolute inset-0 size-full" />
         </div>
       ) : null}

@@ -117,7 +117,6 @@ const pages = [
         body: "Join as a member, lend your skills, or partner with us to take COP Mashinani to more counties.",
         primary: { label: "Become a member", href: "/membership" }, secondary: { label: "Partner with us", href: "/contact" },
       }),
-      S("county", { heading: "Your county. Your next step.", intro: "Wherever you are in Kenya, there is something you can do today." }),
       S("posts", { heading: "News and articles", kind: "all", limit: 3 }),
       S("partners", { heading: "Working with", items: partners }),
     ],
