@@ -6,6 +6,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
+// A phone's address bar sliding away must not make pinned sections jump.
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /** Lenis smooth scrolling driven by GSAP's ticker so ScrollTrigger stays in sync. */
 export function SmoothScroll() {

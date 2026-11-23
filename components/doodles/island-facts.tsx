@@ -24,8 +24,8 @@ export function IslandFacts({ heading, intro, facts }: { heading?: string; intro
 
   return (
     <section className="haze relative overflow-hidden py-20 md:py-28">
-      <Cloud className="pointer-events-none absolute left-[58%] top-10 w-40 opacity-90 [animation:cloudDrift_14s_ease-in-out_infinite_alternate] motion-reduce:[animation:none]" />
-      <Cloud className="pointer-events-none absolute right-[6%] top-28 w-28 opacity-80 [animation:cloudDrift_18s_ease-in-out_infinite_alternate-reverse] motion-reduce:[animation:none]" />
+      <Cloud className="pointer-events-none absolute left-[58%] top-10 hidden w-40 md:block opacity-90 [animation:cloudDrift_14s_ease-in-out_infinite_alternate] motion-reduce:[animation:none]" />
+      <Cloud className="pointer-events-none absolute right-[6%] top-28 hidden w-28 md:block opacity-80 [animation:cloudDrift_18s_ease-in-out_infinite_alternate-reverse] motion-reduce:[animation:none]" />
       <div className="mx-auto max-w-[1200px] px-5 md:px-8">
         <div className="max-w-2xl">
           {heading ? <h2 className="t-h2">{heading}</h2> : null}

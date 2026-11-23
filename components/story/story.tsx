@@ -39,7 +39,7 @@ export function Story({ scenes, ending }: { scenes: Scene[]; ending?: { line: st
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
-          trigger: el, pin: true, start: "top top", end: () => `+=${(scenes.length + 1) * window.innerHeight * 0.9}`, scrub: 0.8,
+          trigger: el, pin: true, start: "top top", end: () => `+=${(scenes.length + 1) * window.innerHeight * 0.9}`, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true,
           onUpdate: (st) => {
             const i = Math.min(scenes.length - 1, Math.floor(st.progress * (scenes.length + 0.6)));
             weather.current = scenes[i]?.weather ?? "none";

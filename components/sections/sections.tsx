@@ -62,7 +62,7 @@ export function Hero3D({ data }: { data: S<{ title?: string; subtitle?: string; 
 /* ───────────── Inner page header ───────────── */
 export function PageHeader({ data }: { data: S<{ title?: string; intro?: string; image?: string }> }) {
   return (
-    <section className="pt-32 md:pt-40">
+    <section className="pt-10 md:pt-40">
       <Container>
         <HeroIn>
           <h1 className="t-h1 max-w-[20ch]">{plain(data.title)}</h1>

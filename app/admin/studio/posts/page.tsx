@@ -19,7 +19,7 @@ export default async function Posts({ searchParams }: PageProps<"/admin/studio/p
     <>
       <PageTitle title="Posts" sub="Articles, press releases and events." actions={<Link href="/admin/studio/posts/new" className="btn btn-primary"><Plus className="size-4" /> New post</Link>} />
       <div className="panel mb-4 inline-flex gap-1 p-1">
-        {KINDS.map((k) => <Link key={k.id} href={`/admin/studio/posts${k.id ? `?kind=${k.id}` : ""}`} className={cn("rounded-lg px-3 py-1.5 text-[13px]", kind === k.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{k.label}</Link>)}
+        {KINDS.map((k) => <Link key={k.id} href={`/admin/studio/posts${k.id ? `?kind=${k.id}` : ""}`} className={cn("rounded-lg px-3 py-2.5 text-[13px] md:py-1.5", kind === k.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{k.label}</Link>)}
       </div>
       <div className="panel">
         {rows.length ? (

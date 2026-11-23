@@ -13,7 +13,7 @@ type Obj = Record<string, Value>;
 
 export function Fields({ fields, value, onChange }: { fields: Field[]; value: Obj; onChange: (v: Obj) => void }) {
   return (
-    <div className="grid gap-5">
+    <div className="grid min-w-0 grid-cols-1 gap-5">
       {fields.map((f) => (
         <FieldInput key={f.name} field={f} value={value[f.name]} onChange={(v) => onChange({ ...value, [f.name]: v })} />
       ))}
@@ -50,7 +50,7 @@ export function FieldInput({ field, value, onChange }: { field: Field; value: Va
       const l = (value as { label?: string; href?: string }) ?? {};
       return (
         <div><label className="label">{field.label}</label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <input className="input" placeholder="Label" value={l.label ?? ""} onChange={(e) => onChange({ ...l, label: e.target.value })} />
             <input className="input font-mono !text-[13px]" placeholder="/page or https://" value={l.href ?? ""} onChange={(e) => onChange({ ...l, href: e.target.value })} />
           </div>{help}
@@ -114,10 +114,10 @@ function ListField({ field, value, onChange }: { field: Extract<Field, { type: "
                   {typeof item.image === "string" && item.image ? <img src={item.image} alt="" className="size-6 rounded object-cover" /> : typeof item.logo === "string" && item.logo ? <img src={item.logo} alt="" className="size-6 rounded object-contain" /> : null}
                   <span className="truncate">{title}</span>
                 </button>
-                <button type="button" className="faint rounded p-1 hover:bg-[var(--d-hover)]" onClick={() => move(i, -1)} aria-label="Move up"><ChevronUp className="size-4" /></button>
-                <button type="button" className="faint rounded p-1 hover:bg-[var(--d-hover)]" onClick={() => move(i, 1)} aria-label="Move down"><ChevronDown className="size-4" /></button>
-                <button type="button" className="faint rounded p-1 hover:bg-[var(--d-hover)]" onClick={() => { const n = [...value]; n.splice(i + 1, 0, structuredClone(item)); onChange(n); }} aria-label="Duplicate"><Copy className="size-3.5" /></button>
-                <button type="button" className="faint rounded p-1 hover:bg-[var(--d-hover)] hover:text-red-500" onClick={() => { onChange(value.filter((_, j) => j !== i)); setOpen(null); }} aria-label="Remove"><Trash2 className="size-3.5" /></button>
+                <button type="button" className="faint rounded p-2 md:p-1 hover:bg-[var(--d-hover)]" onClick={() => move(i, -1)} aria-label="Move up"><ChevronUp className="size-4" /></button>
+                <button type="button" className="faint rounded p-2 md:p-1 hover:bg-[var(--d-hover)]" onClick={() => move(i, 1)} aria-label="Move down"><ChevronDown className="size-4" /></button>
+                <button type="button" className="faint rounded p-2 md:p-1 hover:bg-[var(--d-hover)]" onClick={() => { const n = [...value]; n.splice(i + 1, 0, structuredClone(item)); onChange(n); }} aria-label="Duplicate"><Copy className="size-3.5" /></button>
+                <button type="button" className="faint rounded p-2 md:p-1 hover:bg-[var(--d-hover)] hover:text-red-500" onClick={() => { onChange(value.filter((_, j) => j !== i)); setOpen(null); }} aria-label="Remove"><Trash2 className="size-3.5" /></button>
               </div>
               {isOpen ? <div className="bg-[var(--d-panel-2)] p-4"><Fields fields={field.of} value={item} onChange={(v) => onChange(value.map((x, j) => (j === i ? v : x)))} /></div> : null}
             </div>

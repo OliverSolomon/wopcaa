@@ -46,9 +46,9 @@ export default async function AdminHome() {
         <Link href="/admin/reports?status=new" className="btn btn-primary">Review new reports <ArrowUpRight className="size-4" /></Link>
       } />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
         {tiles.map((t) => (
-          <div key={t.label} className="panel p-5">
+          <div key={t.label} className="panel min-w-0 p-4 md:p-5">
             <div className="flex items-center justify-between">
               <p className="muted text-[13px] font-medium">{t.label}</p>
               <t.icon className={t.warn ? "size-4 text-[var(--d-ochre)]" : "faint size-4"} />

@@ -46,15 +46,15 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-4">
+    <form onSubmit={submit} className="grid gap-4" autoComplete="off">
       {mode === "sign-up" ? (
         <div><label className="mb-2 block text-sm font-semibold" htmlFor="name">Name <span className="font-normal text-slate-soft">(a nickname is fine)</span></label><input id="name" value={name} onChange={(e) => setName(e.target.value)} className={input} autoComplete="nickname" /></div>
       ) : null}
-      <div><label className="mb-2 block text-sm font-semibold" htmlFor="email">Email</label><input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={input} autoComplete="email" /></div>
+      <div><label className="mb-2 block text-sm font-semibold" htmlFor="email">Email</label><input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={input} autoComplete="off" autoCapitalize="none" spellCheck={false} inputMode="email" /></div>
       <div>
         <label className="mb-2 block text-sm font-semibold" htmlFor="pw">Password</label>
         <div className="relative">
-          <input id="pw" type={show ? "text" : "password"} required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} className={input} autoComplete={mode === "sign-in" ? "current-password" : "new-password"} />
+          <input id="pw" type={show ? "text" : "password"} required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} className={input} autoComplete={mode === "sign-in" ? "off" : "new-password"} />
           <button type="button" onClick={() => setShow((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-slate-soft hover:text-forest" aria-label={show ? "Hide password" : "Show password"}>
             {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
           </button>

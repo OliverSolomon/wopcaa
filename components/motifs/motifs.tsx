@@ -52,6 +52,10 @@ function useCanvas(setup: (w: number, h: number) => Draw, className?: string) {
     const leave = () => { px = null; py = null; lastPx = null; };
     host.addEventListener("pointermove", move);
     host.addEventListener("pointerleave", leave);
+    // Touch: a tap or drag counts as the pointer, and lifting the finger lets the scene settle.
+    host.addEventListener("pointerdown", move);
+    host.addEventListener("pointerup", leave);
+    host.addEventListener("pointercancel", leave);
     const io = new IntersectionObserver(([e]) => {
       visible = e.isIntersecting;
       cancelAnimationFrame(raf);
@@ -61,7 +65,7 @@ function useCanvas(setup: (w: number, h: number) => Draw, className?: string) {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
     resize();
-    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); host.removeEventListener("pointermove", move); host.removeEventListener("pointerleave", leave); };
+    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); host.removeEventListener("pointermove", move); host.removeEventListener("pointerleave", leave); host.removeEventListener("pointerdown", move); host.removeEventListener("pointerup", leave); host.removeEventListener("pointercancel", leave); };
   }, [setup]);
   return <canvas ref={ref} className={className} aria-hidden />;
 }

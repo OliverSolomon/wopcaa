@@ -9,7 +9,7 @@ export default function TrackPage() {
   return (
     <>
       <QuickExit />
-      <section className="pb-24 pt-28 md:pt-36">
+      <section className="pb-24 pt-10 md:pt-36">
         <Container className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <h1 className="t-h1">Follow up on your report.</h1>

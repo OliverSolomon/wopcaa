@@ -12,8 +12,8 @@ export async function Footer({ settings }: { settings: SiteSettings }) {
       <Horizon className="block h-[90px] w-full md:h-[140px]" />
       <div className="bg-forest">
       <div className="mx-auto max-w-[1200px] px-5 pb-10 pt-16 md:px-8 md:pt-20">
-        <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-5">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
+          <div className="min-w-0 md:col-span-5">
             <div className="flex items-center gap-3">
               <span className="relative size-12 overflow-hidden rounded-full bg-white"><Image src={settings.logo || "/images/logo.png"} alt="" fill sizes="48px" className="object-contain p-0.5" /></span>
               <span className="text-lg font-semibold">{settings.shortName}</span>
@@ -23,7 +23,7 @@ export async function Footer({ settings }: { settings: SiteSettings }) {
             <p className="mt-1 text-sm text-mist/60">Stories and events from our work, about once a month.</p>
             <NewsletterForm />
           </div>
-          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 md:col-span-7">
+          <div className="grid min-w-0 grid-cols-2 gap-x-6 gap-y-10 [overflow-wrap:anywhere] sm:grid-cols-3 md:col-span-7">
             {settings.nav.filter((g) => g.children?.length).slice(0, 3).map((group) => (
               <div key={group.label}>
                 <h2 className="font-semibold">{group.label}</h2>

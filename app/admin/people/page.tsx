@@ -35,18 +35,30 @@ export default async function People({ searchParams }: PageProps<"/admin/people"
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <div className="panel flex gap-1 p-1">
           {tabs.map((t) => (
-            <a key={t.id} href={`/admin/people${t.id ? `?role=${t.id}` : ""}`} className={cn("rounded-md px-3 py-1.5 text-[13px]", roleFilter === t.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{t.label}</a>
+            <a key={t.id} href={`/admin/people${t.id ? `?role=${t.id}` : ""}`} className={cn("rounded-md px-3 py-2.5 text-[13px] md:py-1.5", roleFilter === t.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{t.label}</a>
           ))}
         </div>
-        <form className="ml-auto flex gap-2">
+        <form className="flex w-full gap-2 md:ml-auto md:w-auto">
           {roleFilter ? <input type="hidden" name="role" value={roleFilter} /> : null}
-          <input name="q" defaultValue={q} placeholder="Search name or email" className="input !w-64" />
+          <input name="q" defaultValue={q} placeholder="Search name or email" className="input min-w-0 !w-auto flex-1 md:!w-64 md:flex-none" />
           <button className="btn btn-ghost">Search</button>
         </form>
       </div>
-      <div className="panel overflow-x-auto">
-        {rows.length ? (
-          <table className="w-full min-w-[760px] text-sm">
+      <div className="panel md:overflow-x-auto">
+        {rows.length ? (<>
+          <ul className="md:hidden">
+            {rows.map((p) => (
+              <li key={p.id} className="hairline border-b p-4 last:border-0">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0"><p className="truncate font-semibold">{p.name || "No name"}</p><p className="faint truncate text-xs">{p.email}</p></div>
+                  {p.banned ? <Pill tone="red">Suspended</Pill> : <Pill tone="green">Active</Pill>}
+                </div>
+                <div className="mt-3"><PersonActions id={p.id} name={p.name || p.email} role={p.role ?? "reporter"} banned={!!p.banned} canManage={canManage} isSelf={p.id === v.id} /></div>
+                <p className="faint mt-2 text-xs">{p.reports} reports, joined {formatDate(p.created_at)}</p>
+              </li>
+            ))}
+          </ul>
+          <table className="hidden w-full min-w-[760px] text-sm md:table">
             <thead className="hairline border-b"><tr>{["Person", "Access", "Status", "Reports", "Joined"].map((h) => <th key={h} className="px-4 py-3">{h}</th>)}</tr></thead>
             <tbody>
               {rows.map((p) => (
@@ -60,7 +72,7 @@ export default async function People({ searchParams }: PageProps<"/admin/people"
               ))}
             </tbody>
           </table>
-        ) : <Empty icon={Users} title="No one found" body="Try another search." />}
+        </>) : <Empty icon={Users} title="No one found" body="Try another search." />}
       </div>
     </>
   );

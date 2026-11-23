@@ -45,24 +45,42 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <div className="panel flex flex-wrap gap-1 p-1">
           {tabs.map((t) => (
-            <Link key={t.id} href={href({ status: t.id })} className={cn("rounded-lg px-3 py-1.5 text-[13px]", status === t.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{t.label}</Link>
+            <Link key={t.id} href={href({ status: t.id })} className={cn("rounded-lg px-3 py-2.5 text-[13px] md:py-1.5", status === t.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{t.label}</Link>
           ))}
         </div>
         <Link href={href({ mine: mine ? "" : "1" })} className={cn("btn", mine ? "btn-primary" : "btn-ghost")}>Assigned to me</Link>
-        <form className="ml-auto flex gap-2" action="/admin/reports">
+        <form className="flex w-full flex-wrap gap-2 md:ml-auto md:w-auto" action="/admin/reports">
           {status ? <input type="hidden" name="status" value={status} /> : null}
-          <select name="category" defaultValue={category} className="input !w-auto">
+          <select name="category" defaultValue={category} className="input min-w-0 !w-auto flex-1 md:flex-none">
             <option value="">All types</option>
             {CATEGORIES.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
           </select>
-          <input name="q" defaultValue={q} placeholder="WP-…" className="input !w-36 font-mono" />
+          <input name="q" defaultValue={q} placeholder="WP-…" className="input min-w-0 !w-28 flex-1 font-mono md:!w-36 md:flex-none" />
           <button className="btn btn-ghost">Filter</button>
         </form>
       </div>
 
-      <div className="panel overflow-x-auto">
-        {rows.length ? (
-          <table className="w-full min-w-[820px] text-sm">
+      <div className="panel overflow-hidden md:overflow-x-auto">
+        {rows.length ? (<>
+          {/* Phones get a list of cases; the table needs more width than they have. */}
+          <ul className="md:hidden">
+            {rows.map((r) => (
+              <li key={r.id}>
+                <Link href={`/admin/reports/${r.id}`} className="row-hover hairline block border-b p-4 last:border-0">
+                  <span className="flex items-center justify-between gap-2"><span className="font-mono text-sm font-semibold">{r.reference_code}</span><Pill tone={statusTone(r.status)}>{statusLabel(r.status)}</Pill></span>
+                  <span className="mt-1.5 flex items-center gap-2 text-sm">{r.is_anonymous ? <EyeOff className="faint size-3.5 shrink-0" /> : <UserRound className="faint size-3.5 shrink-0" />}{categoryLabel(r.category)}</span>
+                  <span className="muted mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                    {r.urgency === "critical" || r.urgency === "high" ? <Pill tone="red">{urgencyLabel(r.urgency).split(" ")[0]}</Pill> : null}
+                    {r.county ? <span>{r.county}</span> : null}
+                    <span>{r.assignee ?? "Unassigned"}</span>
+                    <span>{timeAgo(r.created_at)}</span>
+                    {r.files ? <span className="flex items-center gap-1"><Paperclip className="size-3" />{r.files}</span> : null}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <table className="hidden w-full min-w-[820px] text-sm md:table">
             <thead className="hairline border-b"><tr>{["Reference", "Type", "Status", "Urgency", "County", "Assigned", "Received", ""].map((h) => <th key={h} className="px-4 py-3">{h}</th>)}</tr></thead>
             <tbody>
               {rows.map((r) => (
@@ -79,7 +97,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
               ))}
             </tbody>
           </table>
-        ) : <Empty icon={Inbox} title="No reports match" body="Try a different filter." />}
+        </>) : <Empty icon={Inbox} title="No reports match" body="Try a different filter." />}
       </div>
     </>
   );

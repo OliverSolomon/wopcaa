@@ -88,8 +88,8 @@ export function PersonActions({ id, name, role, banned, canManage, isSelf }: { i
     return <span className="text-sm">{ROLES.find((r) => r.id === role)?.label}{isSelf ? <span className="faint"> (you)</span> : null}</span>;
   }
   return (
-    <div className="flex items-center gap-2">
-      <select className="input !w-auto !py-1.5" value={role} disabled={pending} onChange={(e) => run(() => changeRole(id, e.target.value as Role))}>
+    <div className="flex flex-wrap items-center gap-2">
+      <select className="input min-w-0 !w-auto flex-1 !py-1.5 md:flex-none" value={role} disabled={pending} onChange={(e) => run(() => changeRole(id, e.target.value as Role))}>
         {ROLES.map((r) => <option key={r.id} value={r.id}>{r.label}</option>)}
       </select>
       <div className="relative">

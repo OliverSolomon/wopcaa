@@ -77,7 +77,7 @@ export function Header({ settings }: { settings: SiteSettings; darkTop?: string[
         </div>
 
         {open ? (
-          <div className="max-h-[calc(100dvh-72px)] overflow-y-auto border-t border-line bg-mist px-5 pb-8 pt-2 lg:hidden">
+          <div data-lenis-prevent className="max-h-[calc(100dvh-72px)] overflow-y-auto border-t border-line bg-mist px-5 pb-8 pt-2 lg:hidden">
             {settings.nav.map((item) => (
               <div key={item.label} className="border-b border-line py-3">
                 <Link href={item.href || "#"} className="text-xl font-semibold">{item.label}</Link>

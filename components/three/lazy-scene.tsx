@@ -14,6 +14,8 @@ export function LazyScene({ variant = "globe", light, className }: { variant?: "
   const [show, setShow] = useState(false);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // The hero's background field is decoration: phones keep their battery.
+    if (variant === "field" && window.matchMedia("(max-width: 767px)").matches) return;
     try {
       const c = document.createElement("canvas");
       if (!(c.getContext("webgl2") || c.getContext("webgl"))) return;
@@ -21,7 +23,7 @@ export function LazyScene({ variant = "globe", light, className }: { variant?: "
     const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setShow(true); io.disconnect(); } }, { rootMargin: "200px" });
     if (ref.current) io.observe(ref.current);
     return () => io.disconnect();
-  }, []);
+  }, [variant]);
   return (
     <div ref={ref} className={className} aria-hidden>
       {show ? <Scene variant={variant} light={light} /> : null}

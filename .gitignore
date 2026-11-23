@@ -44,3 +44,7 @@ next-env.d.ts
 .claude/settings.local.json
 
 ACCOUNTS.local.md
+
+# Seeded sign-ins
+SEEDED_CREDENTIALS.local.md
+*.local.md

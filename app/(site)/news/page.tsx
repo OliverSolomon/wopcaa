@@ -57,7 +57,7 @@ async function List({ searchParams }: { searchParams: Promise<Record<string, str
 
 export default function NewsPage({ searchParams }: PageProps<"/news">) {
   return (
-    <section className="pb-24 pt-28 md:pt-36">
+    <section className="pb-24 pt-10 md:pt-36">
       <Container>
         <h1 className="t-h1">News and articles</h1>
         <p className="t-lead mt-4 max-w-[56ch]">Writing, statements and gatherings from our work with women.</p>

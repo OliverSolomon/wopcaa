@@ -24,11 +24,11 @@ export function SettingsEditor({ initial }: { initial: SiteSettings }) {
         })} className="btn btn-primary">{pending ? <Loader2 className="size-4 animate-spin" /> : state === "saved" ? <Check className="size-4" /> : null}{state === "saved" ? "Saved" : "Save settings"}</button>
       } />
       {state === "error" ? <p className="mb-4 text-sm text-[var(--d-ochre)]">{error}</p> : null}
-      <div className="grid gap-4 md:grid-cols-[200px_1fr]">
-        <nav className="space-y-0.5">
-          {SETTINGS_FIELDS.map((g) => <button key={g.group} onClick={() => setTab(g.group)} className="nav-item w-full" data-active={tab === g.group}>{g.group}</button>)}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-[200px_1fr]">
+        <nav className="-mx-4 flex gap-1 overflow-x-auto px-4 [scrollbar-width:none] md:mx-0 md:block md:space-y-0.5 md:overflow-visible md:px-0">
+          {SETTINGS_FIELDS.map((g) => <button key={g.group} onClick={() => setTab(g.group)} className="nav-item shrink-0 md:w-full" data-active={tab === g.group}>{g.group}</button>)}
         </nav>
-        <section className={cn("panel max-w-2xl p-6")}>
+        <section className={cn("panel min-w-0 max-w-2xl p-4 md:p-6")}>
           <Fields fields={group.fields} value={d as unknown as Record<string, unknown>} onChange={(v) => setD(v as unknown as SiteSettings)} />
         </section>
       </div>

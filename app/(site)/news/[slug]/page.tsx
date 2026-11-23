@@ -25,7 +25,7 @@ export default async function PostPage({ params }: PageProps<"/news/[slug]">) {
   if (!post) notFound();
   return (
     <article className="pb-24">
-      <Container className="max-w-3xl pt-28 md:pt-36">
+      <Container className="max-w-3xl pt-10 md:pt-36">
         <Link href="/news" className="link text-sm">All news and articles</Link>
         <p className="t-meta mt-8">{KIND[post.kind]}{post.category && post.category !== KIND[post.kind] ? `, ${post.category}` : ""}</p>
         <h1 className="t-h1 mt-2">{post.title}</h1>

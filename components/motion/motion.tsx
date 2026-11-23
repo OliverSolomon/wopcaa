@@ -65,7 +65,7 @@ export function HorizontalScroller({ children, className }: { children: ReactNod
   }, { scope: wrap });
   return (
     <div ref={wrap} className={cn("relative overflow-hidden", className)}>
-      <div ref={track} className="flex gap-5 overflow-x-auto px-5 pb-4 md:overflow-visible md:px-[max(2rem,calc((100vw-1200px)/2))] md:pb-0 [scrollbar-width:none]">
+      <div ref={track} className="flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-4 *:snap-start md:snap-none md:gap-5 md:overflow-visible md:px-[max(2rem,calc((100vw-1200px)/2))] md:pb-0 [scrollbar-width:none]">
         {children}
       </div>
     </div>

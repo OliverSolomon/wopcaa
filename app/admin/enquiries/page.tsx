@@ -23,7 +23,7 @@ export default async function Enquiries({ searchParams }: PageProps<"/admin/enqu
       <PageTitle title="Enquiries" sub="Messages and applications from the public website." />
       <div className="panel mb-4 inline-flex gap-1 p-1">
         {KINDS.map((k) => (
-          <Link key={k.id} href={`/admin/enquiries?kind=${k.id}`} className={cn("rounded-lg px-3 py-1.5 text-[13px]", kind === k.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{k.label}</Link>
+          <Link key={k.id} href={`/admin/enquiries?kind=${k.id}`} className={cn("rounded-lg px-3 py-2.5 text-[13px] md:py-1.5", kind === k.id ? "bg-[var(--d-active)] font-semibold" : "muted hover:bg-[var(--d-hover)]")}>{k.label}</Link>
         ))}
       </div>
       <div className="panel">

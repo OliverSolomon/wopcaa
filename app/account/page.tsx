@@ -21,10 +21,10 @@ export default async function MyReports() {
       <PageTitle title={`Hello, ${v.name.split(" ")[0]}.`} sub="Your reports, and every message from the case team, in one private place." actions={
         <Link href="/report" className="btn btn-primary"><FilePlus2 className="size-4" /> New report</Link>
       } />
-      <div className="mb-6 grid gap-4 sm:grid-cols-3">
+      <div className="mb-6 grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-3">
         <div className="panel p-5"><p className="muted text-[13px]">Reports</p><p className="mt-2 font-semibold text-[2.2rem] leading-none">{rows.length}</p></div>
         <div className="panel p-5"><p className="muted text-[13px]">Open</p><p className="mt-2 font-semibold text-[2.2rem] leading-none">{rows.filter((r) => !["resolved", "closed"].includes(r.status)).length}</p></div>
-        <div className="panel flex items-start gap-3 p-5"><Lock className="mt-0.5 size-4 text-[var(--d-accent)]" /><p className="muted text-[13px]">Everything you write is encrypted. Only the WOPCAA case team can read it.</p></div>
+        <div className="panel col-span-2 flex items-start gap-3 p-5 lg:col-span-1"><Lock className="mt-0.5 size-4 text-[var(--d-accent)]" /><p className="muted text-[13px]">Everything you write is encrypted. Only the WOPCAA case team can read it.</p></div>
       </div>
       <div className="panel">
         {rows.length ? (

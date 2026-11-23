@@ -36,9 +36,13 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
   const [adding, setAdding] = useState<number | null>(null);
   const [panel, setPanel] = useState<"history" | null>(null);
   const [menu, setMenu] = useState(false);
+  // Below xl the three panes become tabs: one at a time on a phone or tablet.
+  const [pane, setPane] = useState<"outline" | "fields" | "preview">("outline");
+  const openPane = (key: string) => { setSelected(key); setPane("fields"); };
   const [pending, start] = useTransition();
   const dragFrom = useRef<number | null>(null);
-  const first = useRef(true);
+  // What the server last holds, so an effect re-run or an undone edit never counts as a change.
+  const lastSaved = useRef(JSON.stringify(d));
 
   const update = (patch: Partial<Draft>) => setD((p) => ({ ...p, ...patch }));
   const setSection = (key: string, value: Section) => update({ sections: d.sections.map((s) => (s._key === key ? value : s)) });
@@ -47,11 +51,11 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
   const save = useCallback(async (draft: Draft) => {
     setSaveState("saving");
     const r = await saveDraft(page.id, draft);
-    if (r.ok) { setSaveState("saved"); setHasDraft(true); setError(null); setPreviewKey((k) => k + 1); }
+    if (r.ok) { lastSaved.current = JSON.stringify(draft); setSaveState("saved"); setHasDraft(true); setError(null); setPreviewKey((k) => k + 1); }
     else { setSaveState("error"); setError(r.error); }
   }, [page.id]);
   useEffect(() => {
-    if (first.current) { first.current = false; return; }
+    if (JSON.stringify(d) === lastSaved.current) { setSaveState("saved"); return; }
     setSaveState("dirty");
     const t = setTimeout(() => save(d), 900);
     return () => clearTimeout(t);
@@ -73,7 +77,7 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
     const next = [...d.sections];
     next.splice(at, 0, s);
     update({ sections: next });
-    setSelected(s._key);
+    openPane(s._key);
     setAdding(null);
   };
   const move = (from: number, to: number) => {
@@ -103,8 +107,8 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
         <span className="faint flex items-center gap-1.5 text-xs">
           {saveState === "saving" ? <><Loader2 className="size-3 animate-spin" /> Saving</> : saveState === "dirty" ? "Editing…" : saveState === "error" ? <span className="text-[var(--d-ochre)]">Not saved</span> : <><Check className="size-3" /> Draft saved</>}
         </span>
-        <div className="ml-auto flex items-center gap-2">
-          <div className="hairline hidden rounded-lg border p-0.5 md:flex">
+        <div className="ml-auto flex flex-wrap items-center gap-2">
+          <div className="hairline hidden rounded-lg border p-0.5 xl:flex">
             <button onClick={() => setDevice("desktop")} className={cn("rounded-md p-1.5", device === "desktop" && "bg-[var(--d-active)]")} aria-label="Desktop preview"><Monitor className="size-4" /></button>
             <button onClick={() => setDevice("mobile")} className={cn("rounded-md p-1.5", device === "mobile" && "bg-[var(--d-active)]")} aria-label="Mobile preview"><Smartphone className="size-4" /></button>
           </div>
@@ -127,10 +131,16 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
       </div>
       {error ? <div className="flex items-center justify-between bg-[var(--d-ochre-soft)] px-4 py-2 text-sm text-[var(--d-ochre)]">{error}<button onClick={() => setError(null)}><X className="size-4" /></button></div> : null}
 
+      <div className="hairline flex border-b bg-[var(--d-panel)] p-1 xl:hidden" role="tablist" aria-label="Editor panes">
+        {([["outline", "Sections"], ["fields", "Edit"], ["preview", "Preview"]] as const).map(([id, label]) => (
+          <button key={id} role="tab" aria-selected={pane === id} onClick={() => setPane(id)} className={cn("min-h-10 flex-1 rounded-md text-sm", pane === id ? "bg-[var(--d-active)] font-semibold" : "muted")}>{label}</button>
+        ))}
+      </div>
+
       <div className="flex min-h-0 flex-1">
         {/* Outline */}
-        <aside className="hairline w-[260px] shrink-0 overflow-y-auto border-r bg-[var(--d-panel)] p-3">
-          <button onClick={() => setSelected("page")} className="nav-item w-full" data-active={selected === "page"}><PanelTop className="size-4" /> Page settings</button>
+        <aside className={cn("hairline w-full shrink-0 overflow-y-auto border-r bg-[var(--d-panel)] p-3 xl:block xl:w-[260px]", pane !== "outline" && "hidden")}>
+          <button onClick={() => openPane("page")} className="nav-item w-full" data-active={selected === "page"}><PanelTop className="size-4" /> Page settings</button>
           <p className="faint mb-1 mt-4 px-3 text-[10.5px] font-semibold uppercase tracking-[0.12em]">Sections</p>
           <ol className="space-y-0.5">
             {d.sections.map((s, i) => {
@@ -145,12 +155,12 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
                   onDrop={() => { if (dragFrom.current !== null) move(dragFrom.current, i); dragFrom.current = null; }}
                   className="group">
                   <div className="nav-item !pr-1" data-active={selected === s._key}>
-                    <GripVertical className="faint size-3.5 shrink-0 cursor-grab opacity-0 group-hover:opacity-100" />
-                    <button onClick={() => setSelected(s._key)} className={cn("flex min-w-0 flex-1 items-center gap-2 text-left", s.hidden && "opacity-40")}>
+                    <GripVertical className="faint hidden size-3.5 shrink-0 cursor-grab opacity-0 group-hover:opacity-100 xl:block" />
+                    <button onClick={() => openPane(s._key)} className={cn("flex min-w-0 flex-1 items-center gap-2 text-left", s.hidden && "opacity-40")}>
                       <Icon className="size-4 shrink-0" />
                       <span className="min-w-0"><span className="block truncate text-[13px]">{label}</span><span className="faint block text-[10.5px]">{sd?.title}</span></span>
                     </button>
-                    <button onClick={() => setSection(s._key, { ...s, hidden: !s.hidden })} className="faint rounded p-1 opacity-0 hover:bg-[var(--d-hover)] group-hover:opacity-100" title={s.hidden ? "Show" : "Hide"}>{s.hidden ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}</button>
+                    <button onClick={() => setSection(s._key, { ...s, hidden: !s.hidden })} className="faint rounded p-2 hover:bg-[var(--d-hover)] group-hover:opacity-100 xl:p-1 xl:opacity-0" title={s.hidden ? "Show" : "Hide"}>{s.hidden ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}</button>
                   </div>
                 </li>
               );
@@ -162,7 +172,7 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
         </aside>
 
         {/* Fields */}
-        <section className="w-[400px] shrink-0 overflow-y-auto bg-[var(--d-bg)] p-5 xl:w-[440px]">
+        <section className={cn("w-full shrink-0 overflow-y-auto bg-[var(--d-bg)] p-4 md:p-5 xl:block xl:w-[400px] 2xl:w-[440px]", pane !== "fields" && "hidden")}>
           {selected === "page" ? (
             <div className="grid gap-5">
               <div><p className="font-semibold">Page settings</p><p className="faint text-xs">Title, address, search description and menu.</p></div>
@@ -194,7 +204,7 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
         </section>
 
         {/* Preview */}
-        <section className="hairline relative hidden min-w-0 flex-1 border-l bg-[var(--d-hover)] lg:block">
+        <section className={cn("hairline relative min-w-0 flex-1 border-l bg-[var(--d-hover)] xl:block", pane !== "preview" && "hidden")}>
           <div className={cn("mx-auto h-full bg-white transition-all", device === "mobile" ? "my-4 h-[calc(100%-2rem)] w-[390px] overflow-hidden rounded-[28px] shadow-2xl ring-8 ring-black/80" : "w-full")}>
             <iframe key={previewKey} src={`/preview/${page.id}`} title="Preview" className="size-full" />
           </div>
@@ -202,7 +212,7 @@ export function PageEditor({ page, revisions }: { page: EditorPage; revisions: R
         </section>
 
         {panel === "history" ? (
-          <aside className="hairline w-[300px] shrink-0 overflow-y-auto border-l bg-[var(--d-panel)] p-4">
+          <aside className="hairline fixed inset-0 z-40 w-full overflow-y-auto border-l bg-[var(--d-panel)] p-4 xl:static xl:w-[300px] xl:shrink-0">
             <div className="mb-4 flex items-center justify-between"><p className="font-semibold">Published versions</p><button onClick={() => setPanel(null)}><X className="size-4" /></button></div>
             {revisions.length ? (
               <ul className="space-y-1">

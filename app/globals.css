@@ -160,3 +160,12 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Phones: 16px controls stop iOS zooming on focus, and everything tappable is finger-sized. */
+@media (max-width: 767px) {
+  input, select, textarea { font-size: 16px !important; }
+  .dash .input { min-height: 44px; }
+  .dash .btn { min-height: 42px; }
+  .dash .nav-item { min-height: 44px; }
+  .t-lead { font-size: 1.125rem; }
+}
