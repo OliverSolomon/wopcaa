@@ -274,17 +274,23 @@ export function Stats({ data }: { data: S<{ heading?: string; items?: unknown; s
 /* ───────────── Horizontal gallery ───────────── */
 export function Gallery({ data }: { data: S<{ heading?: string; items?: unknown }> }) {
   const items = list<{ image: string; caption: string; place?: string }>(data.items);
+  const intro = "Photos from our work with women and communities in Kajiado.";
   return (
     <section className="py-16 md:py-0">
-      <HorizontalScroller className="md:flex md:h-[100svh] md:flex-col md:justify-center">
-        <div className="flex w-[78vw] shrink-0 flex-col justify-center pr-4 md:w-[28vw]">
+      {/* Phones: the heading sits above the strip instead of taking up the first slide. */}
+      <div className="mb-6 px-5 md:hidden">
+        <h2 className="t-h2">{plain(data.heading)}</h2>
+        <p className="mt-3 text-slate">{intro} <span className="whitespace-nowrap">Swipe to see more.</span></p>
+      </div>
+      <HorizontalScroller label={plain(data.heading) || "Photo gallery"} className="md:flex md:h-[100svh] md:flex-col md:justify-center">
+        <div data-intro="1" className="hidden w-[28vw] shrink-0 flex-col justify-center pr-4 md:flex">
           <h2 className="t-h2">{plain(data.heading)}</h2>
-          <p className="mt-4 text-slate">Photos from our work with women and communities in Kajiado.</p>
+          <p className="mt-4 text-slate">{intro}</p>
         </div>
         {items.map((it, i) => (
-          <figure key={i} className={cn("shrink-0", i % 2 ? "w-[66vw] md:mt-20 md:w-[26vw]" : "w-[78vw] md:w-[34vw]")}>
-            <div className={cn("relative overflow-hidden bg-mist-deep", i % 2 ? "arch-tl aspect-[3/4]" : "arch-tr aspect-[4/3]")}>
-              {it.image ? <Image src={it.image} alt={it.caption ?? ""} fill sizes="35vw" className="object-cover" /> : null}
+          <figure key={i} className={cn("w-[84vw] max-w-[420px] shrink-0 md:max-w-none", i % 2 ? "md:mt-20 md:w-[26vw]" : "md:w-[34vw]")}>
+            <div className={cn("relative aspect-[4/5] overflow-hidden bg-mist-deep", i % 2 ? "arch-tl md:aspect-[3/4]" : "arch-tr md:aspect-[4/3]")}>
+              {it.image ? <Image src={it.image} alt={it.caption ?? ""} fill sizes="(min-width:768px) 35vw, 84vw" className="object-cover" /> : null}
             </div>
             <figcaption className="mt-3"><span className="font-semibold">{it.caption}</span>{it.place ? <span className="t-meta block">{it.place}</span> : null}</figcaption>
           </figure>
@@ -424,10 +430,10 @@ export function Partners({ data }: { data: S<{ heading?: string; items?: unknown
     <section className="py-14">
       <Container className="flex flex-col gap-8 md:flex-row md:items-center md:gap-14">
         <p className="shrink-0 font-semibold text-slate">{data.heading}</p>
-        <ul className="flex flex-1 flex-wrap items-center gap-x-12 gap-y-6">
+        <ul className="flex flex-1 flex-wrap items-center gap-x-14 gap-y-8">
           {items.map((p, i) => {
-            const logo = <span className="relative block h-12 w-32 grayscale transition-[filter,opacity] duration-300 hover:grayscale-0" title={p.name}><Image src={p.logo} alt={p.name} fill sizes="128px" className="object-contain" unoptimized={p.logo.endsWith(".svg")} /></span>;
-            return <li key={i} className="opacity-75 hover:opacity-100">{p.href ? <a href={p.href} target="_blank" rel="noopener noreferrer">{logo}</a> : logo}</li>;
+            const logo = <span className="relative block h-16 w-44 grayscale transition-[filter,opacity] duration-300 hover:grayscale-0 md:h-20 md:w-56" title={p.name}><Image src={p.logo} alt={p.name} fill sizes="(min-width:768px) 224px, 176px" className="object-contain" unoptimized={p.logo.endsWith(".svg")} /></span>;
+            return <li key={i} className="opacity-85 hover:opacity-100">{p.href ? <a href={p.href} target="_blank" rel="noopener noreferrer">{logo}</a> : logo}</li>;
           })}
         </ul>
       </Container>

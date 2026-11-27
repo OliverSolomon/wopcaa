@@ -32,6 +32,7 @@ export function HeroFrame({ images }: { images: { image: string; caption?: strin
             fill
             priority={n === 0}
             sizes="(min-width:1024px) 45vw, 100vw"
+            quality={90}
             className={cn("object-cover transition-transform duration-[7000ms] ease-linear", n === i ? "scale-[1.06]" : "scale-100")}
           />
         </div>

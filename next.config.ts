@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    // 90 is for full-bleed and large photos; everything else stays at the default 75.
+    qualities: [75, 90],
+    formats: ["image/avif", "image/webp"],
     remotePatterns: storageHost ? [{ protocol: "https", hostname: storageHost }] : [],
   },
   async headers() {

@@ -49,6 +49,22 @@ html { background: var(--color-mist); color: var(--color-forest); }
 @keyframes flap { from { transform: rotate(0deg); } to { transform: rotate(28deg); } }
 @keyframes drift { from { transform: translate(0, 0); } to { transform: translate(18px, -8px); } }
 @keyframes cloudDrift { from { transform: translateX(-12px); } to { transform: translateX(12px); } }
+/* Illustration motion (see components/doodles). Every animated group pivots at its own local 0,0. */
+@keyframes doveWing { 0%, 100% { transform: scaleY(1); } 45% { transform: scaleY(-0.6); } }
+@keyframes doveBob { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-1.4px); } }
+@keyframes armWave { from { transform: rotate(-7deg); } to { transform: rotate(7deg); } }
+@keyframes leafSway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+@keyframes pour { to { stroke-dashoffset: -11; } }
+@keyframes browse { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-4deg); } }
+.ill-pivot { transform-box: view-box; transform-origin: 0 0; }
+.ill-wing { animation: doveWing 900ms cubic-bezier(.45,0,.55,1) infinite; }
+.ill-wing-far { animation: doveWing 900ms cubic-bezier(.45,0,.55,1) 60ms infinite; }
+.ill-bob { animation: doveBob 900ms cubic-bezier(.45,0,.55,1) infinite; }
+.ill-wave { animation: armWave 1400ms ease-in-out infinite alternate; }
+.ill-leaf { animation: leafSway 2600ms ease-in-out infinite alternate; }
+.ill-pour { animation: pour 700ms linear infinite; }
+.ill-browse { animation: browse 7000ms ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .ill-wing, .ill-wing-far, .ill-bob, .ill-wave, .ill-leaf, .ill-pour, .ill-browse { animation: none; } }
 @keyframes pinPulse { 0% { r: 7; opacity: .6; } 100% { r: 20; opacity: 0; } }
 
 /* The daylight haze behind illustrated sections: a soft sky, warm toward the ground. */
@@ -169,3 +185,6 @@ html.lenis, html.lenis body { height: auto; }
   .dash .nav-item { min-height: 44px; }
   .t-lead { font-size: 1.125rem; }
 }
+
+/* Phones: form fields at 16px or larger, so iOS never zooms the page when one is tapped. */
+@media (pointer: coarse) { input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: max(16px, 1em); } }

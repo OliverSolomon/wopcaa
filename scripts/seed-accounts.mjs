@@ -1,9 +1,8 @@
 // Seeds one sign-in for each role through the app's own Neon Auth route, sets the role,
-// proves the sign-in works, and writes the passwords to a git-ignored file.
+// proves the sign-in works, and writes the sign-ins to a git-ignored file.
 // Needs the app running. Usage: npm run db:seed-accounts  (SEED_BASE_URL overrides the address)
 import { neon } from "@neondatabase/serverless";
-import { randomBytes } from "node:crypto";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const base = (process.env.SEED_BASE_URL ?? "http://localhost:3100").replace(/\/$/, "");
@@ -17,18 +16,13 @@ const people = [
   { email: "user@gmail.com", name: "Test User", role: "reporter", can: "Makes reports and follows their own" },
 ];
 
-// Re-running keeps the passwords already on file.
-const known = new Map();
-if (existsSync(file)) {
-  for (const m of readFileSync(file, "utf8").matchAll(/\|\s*\S+\s*\|\s*(\S+@\S+)\s*\|\s*`([^`]+)`/g)) known.set(m[1], m[2]);
-}
-const newPassword = () => `${randomBytes(12).toString("base64url")}-${randomBytes(2).toString("hex")}`;
+// Every seeded account shares one test password (SEED_PASSWORD overrides it).
+const PASSWORD = process.env.SEED_PASSWORD ?? "bassword";
 const post = (path, body) => fetch(`${base}/api/auth/${path}`, { method: "POST", headers: { "Content-Type": "application/json", Origin: base }, body: JSON.stringify(body) });
 
 for (const p of people) {
   const [existing] = await sql`select id from neon_auth."user" where lower(email) = ${p.email}`;
-  if (existing && !known.has(p.email)) throw new Error(`${p.email} exists but its password is not in the credentials file.`);
-  p.password = known.get(p.email) ?? newPassword();
+  p.password = PASSWORD;
   if (!existing) {
     const res = await post("sign-up/email", { email: p.email, password: p.password, name: p.name });
     if (!res.ok) throw new Error(`sign-up failed for ${p.email}: ${res.status} ${(await res.text()).slice(0, 200)}`);
@@ -39,13 +33,13 @@ for (const p of people) {
   // Only super admins hold Neon Auth's own admin role.
   await sql`update neon_auth."user" set role = ${p.role === "super_admin" ? "admin" : "user"}, "emailVerified" = true where id = ${u.id}`;
   const login = await post("sign-in/email", { email: p.email, password: p.password });
-  if (!login.ok) throw new Error(`sign-in failed for ${p.email}: ${login.status}`);
+  if (!login.ok) throw new Error(`sign-in failed for ${p.email}: ${login.status} (an existing account keeps its own password; reset it from People)`);
   console.log("ok", p.role, p.email);
 }
 
 writeFileSync(file, `# WOPCAA seeded sign-ins (local only, git-ignored, never commit or share)
 
-Sign in at ${base}/sign-in
+Sign in at ${base}/sign-in. Staging: https://wopcaa.vercel.app/sign-in (same database)
 
 | Role | Email | Password | Can do |
 | --- | --- | --- | --- |

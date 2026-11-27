@@ -68,10 +68,10 @@ const pages = [
       }),
       S("story", {
         scenes: [
-          { image: "/images/maasai-women.jpg", line: "This is Kajiado.", sub: "Open pasture, scarce water, and women who hold their communities together.", weather: "seeds" },
+          { image: "/images/maasai-women.jpg", line: "This is Kajiado.", sub: "Open pasture, scarce water, and women who hold their communities together." },
           { image: "/images/articles/Kenya-Floods.png", line: "The rains failed. Then they came all at once.", sub: "In 2024 floods across Kenya killed more than 200 people and displaced more than 20,000 families.", note: "Kenya Disaster Response Unit, cited in our article on flooding in East Africa", weather: "rain" },
-          { image: "/images/voices.jpeg", line: "Women carry it first.", sub: "Water, food, land and safety: when the climate breaks, the weight lands on women and girls, and violence often follows.", weather: "embers" },
-          { image: "/images/cop28.jpeg", line: "So they lead.", sub: "At COP Mashinani in Isinya, Maasai women set the agenda for climate action in their own words.", weather: "seeds" },
+          { image: "/images/voices.jpeg", line: "Women carry it first.", sub: "Water, food, land and safety: when the climate breaks, the weight lands on women and girls, and violence often follows." },
+          { image: "/images/cop28.jpeg", line: "So they lead.", sub: "At COP Mashinani in Isinya, Maasai women set the agenda for climate action in their own words." },
         ],
         endingLine: "A greener, peaceful tomorrow. Ready when you are.",
         primary: { label: "Join us", href: "/membership" }, secondary: { label: "Report abuse safely", href: "/report" },

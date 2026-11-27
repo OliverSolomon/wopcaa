@@ -54,7 +54,7 @@ export const SECTION_DEFS: SectionDef[] = [
   {
     type: "story",
     title: "Story (cinematic scroll)",
-    description: "Full-screen scenes that play as the visitor scrolls: a slow camera move on each photo, a subtitle line, and weather (rain, embers or rising seeds)",
+    description: "Full-screen scenes that play as the visitor scrolls: a slow camera move on each photo, a subtitle line, and optional rain",
     icon: "Clapperboard",
     fields: [
       { name: "scenes", label: "Scenes", type: "list", itemLabel: "line", of: [
@@ -63,7 +63,7 @@ export const SECTION_DEFS: SectionDef[] = [
         { name: "line", label: "On-screen line", type: "text", help: "Short and in the present tense, like a film subtitle" },
         { name: "sub", label: "Supporting sentence", type: "textarea", rows: 2 },
         { name: "note", label: "Source or caption", type: "text" },
-        { name: "weather", label: "Weather", type: "select", options: [{ value: "none", label: "None" }, { value: "rain", label: "Rain" }, { value: "embers", label: "Embers (heat, drought)" }, { value: "seeds", label: "Rising seeds (growth)" }] },
+        { name: "weather", label: "Weather", type: "select", options: [{ value: "none", label: "None" }, { value: "rain", label: "Rain" }] },
       ] },
       { name: "endingLine", label: "Closing line", type: "text" },
       { name: "primary", label: "Closing button", type: "link" },

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { DOVE, DOVE_TONES, WING_PIVOT } from "@/components/doodles/dove-paths";
 
 /**
  * Three small interactive scenes taken from the WOPCAA emblem: doves (peace),
@@ -17,7 +18,6 @@ const T = {
   ink: "#2b2f26", olive: "#5f6e36", oliveDeep: "#46532a", sage: "#9aa275", straw: "#cdb877", strawDeep: "#b39a58", dryGrass: "#d9c896",
   brassLight: "#e6cf93", brass: "#c09a4f", brassDeep: "#87672e", stone: "#d6cfbf", stoneDeep: "#b7ae9a",
   skyTop: "#e9ecea", skyLow: "#f4ede0", sun: "rgba(232,196,128,", hillFar: "#dcd8c8", hillNear: "#cfcab5",
-  feather: "#fbfaf6", featherShade: "#dcd6c8", featherLine: "#b9b2a1", beak: "#cf9a45",
 };
 
 function useCanvas(setup: (w: number, h: number) => Draw, className?: string) {
@@ -102,55 +102,53 @@ function sky(ctx: CanvasRenderingContext2D, w: number, h: number, sunX: number, 
 
 /* ───────────── Peace: doves that part around the pointer ───────────── */
 
-function dove(ctx: CanvasRenderingContext2D, size: number, flap: number, far: number) {
-  const u = size / 10;
+let DOVE_PATHS: Record<"body" | "belly" | "beak" | "tail" | "wing" | "wingLines", Path2D> | null = null;
+const dovePaths = () => (DOVE_PATHS ??= {
+  body: new Path2D(DOVE.body), belly: new Path2D(DOVE.belly), beak: new Path2D(DOVE.beak),
+  tail: new Path2D(DOVE.tail), wing: new Path2D(DOVE.wing), wingLines: new Path2D(DOVE.wingLines),
+});
+
+/**
+ * The same dove as the SVG scenes (components/doodles/dove-paths.ts), facing +x.
+ * `beat` runs 0..1 per wingbeat: a quick downstroke to 45%, a slower recovery.
+ * The wing squashes through the shoulder from scaleY 1 (up) to -0.6 (down).
+ */
+function dove(ctx: CanvasRenderingContext2D, size: number, beat: number, far: number) {
+  const P = dovePaths();
+  const e = beat < 0.45 ? beat / 0.45 : 1 - (beat - 0.45) / 0.55;
+  const ease = e * e * (3 - 2 * e);
+  const wing = 1 - 1.6 * ease;
   ctx.save();
-  ctx.scale(u, u);
+  ctx.scale(size / 22, size / 22);
+  ctx.translate(0, -1.4 * ease);
   ctx.lineJoin = "round"; ctx.lineCap = "round";
-  // body with a fanned tail, facing +x
-  const body = ctx.createLinearGradient(0, -5, 0, 5);
-  body.addColorStop(0, T.feather); body.addColorStop(1, T.featherShade);
-  ctx.fillStyle = body;
-  ctx.strokeStyle = T.featherLine; ctx.lineWidth = 0.35;
-  ctx.beginPath();
-  ctx.moveTo(11, -1.6);
-  ctx.bezierCurveTo(8.5, -5.4, -1.5, -5.2, -8, -1.4);
-  ctx.lineTo(-15.5, -4.2); ctx.quadraticCurveTo(-16.4, 0.6, -15.4, 4.4); ctx.lineTo(-8, 1.8);
-  ctx.bezierCurveTo(-2, 5.6, 7.5, 4.6, 11, -1.6);
-  ctx.closePath(); ctx.fill(); ctx.stroke();
-  // tail feathers
-  ctx.beginPath(); ctx.moveTo(-9, 0); ctx.lineTo(-15.2, -2.4); ctx.moveTo(-9, 0.6); ctx.lineTo(-15.6, 0.6); ctx.moveTo(-9, 1.2); ctx.lineTo(-15.2, 3.2); ctx.stroke();
-  // head, eye, beak
-  ctx.fillStyle = T.feather;
-  ctx.beginPath(); ctx.arc(9.2, -2.6, 2.9, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = T.beak;
-  ctx.beginPath(); ctx.moveTo(11.8, -3.2); ctx.lineTo(14.4, -2.4); ctx.lineTo(11.7, -1.7); ctx.closePath(); ctx.fill();
-  if (far > 0.6) { ctx.fillStyle = T.ink; ctx.beginPath(); ctx.arc(10, -3.2, 0.55, 0, Math.PI * 2); ctx.fill(); }
-  // wing: the tip swings from above the back (flap = 1) to below the belly (flap = -1)
-  const tipY = -2 - 13 * flap, tipX = -10 + Math.abs(flap) * 2;
-  const up = flap > 0;
-  const wg = ctx.createLinearGradient(0, -2, tipX, tipY);
-  wg.addColorStop(0, up ? "#ffffff" : T.featherShade); wg.addColorStop(1, up ? "#f1eee6" : "#cfc8b8");
-  ctx.fillStyle = wg;
-  ctx.beginPath();
-  ctx.moveTo(4, -2.2);
-  ctx.bezierCurveTo(2, -2 - 7 * flap, -4, tipY + 3 * flap, tipX, tipY);
-  // trailing edge: three scalloped primaries back to the shoulder
-  const pts = [0.75, 0.5, 0.25].map((f) => [tipX + (4 - tipX) * (1 - f) * 0.9, -2 + (tipY + 2) * f * 0.92]);
-  let prev = [tipX, tipY];
-  for (const [x, y] of pts) { ctx.quadraticCurveTo((prev[0] + x) / 2 + 1.6, (prev[1] + y) / 2 + 1.2 * Math.sign(flap || 1), x, y); prev = [x, y]; }
-  ctx.quadraticCurveTo(1, -1.4, 4, -2.2);
-  ctx.closePath(); ctx.fill(); ctx.stroke();
+  const flap = (path: Path2D, k: number, dx: number, dy: number, fill: string, lines?: Path2D) => {
+    ctx.save();
+    ctx.translate(WING_PIVOT.x, WING_PIVOT.y); ctx.scale(1, k); ctx.translate(-WING_PIVOT.x + dx, -WING_PIVOT.y + dy);
+    ctx.fillStyle = fill; ctx.fill(path); ctx.lineWidth = 0.55; ctx.strokeStyle = DOVE_TONES.line; ctx.stroke(path);
+    if (lines) { ctx.globalAlpha *= 0.55; ctx.lineWidth = 0.45; ctx.stroke(lines); }
+    ctx.restore();
+  };
+  flap(P.wing, wing * 0.9, -2, 0.6, DOVE_TONES.farWing);
+  ctx.fillStyle = DOVE_TONES.feather; ctx.fill(P.body);
+  ctx.lineWidth = 0.6; ctx.strokeStyle = DOVE_TONES.line; ctx.stroke(P.body);
+  ctx.fillStyle = DOVE_TONES.shade; ctx.fill(P.belly);
+  ctx.lineWidth = 0.5; ctx.stroke(P.tail);
+  ctx.fillStyle = DOVE_TONES.beak; ctx.fill(P.beak);
+  if (far > 0.5) { ctx.fillStyle = DOVE_TONES.eye; ctx.beginPath(); ctx.arc(DOVE.eye.cx, DOVE.eye.cy, DOVE.eye.r, 0, Math.PI * 2); ctx.fill(); }
+  flap(P.wing, wing, 0, 0, DOVE_TONES.feather, P.wingLines);
   ctx.restore();
 }
 
 const peace = (w: number, h: number): Draw => {
   const k = Math.max(0.75, Math.min(1.7, h / 190));
-  const n = Math.max(7, Math.min(13, Math.round((w * h) / 13000)));
+  const n = Math.max(5, Math.min(9, Math.round((w * h) / 18000)));
+  // A loose, spread-out flock: evenly spaced across the width, each at its own height and depth.
   const birds = Array.from({ length: n }, (_, i) => {
-    const z = 0.45 + (i / n) * 0.55; // far to near
-    return { x: Math.random() * w, y: h * (0.18 + Math.random() * 0.45), vx: (14 + Math.random() * 10) * (0.6 + z), vy: 0, phase: Math.random() * 6, z, beat: 7 + Math.random() * 2 };
+    const z = 0.5 + ((i * 7) % n) / n * 0.5; // far to near, shuffled
+    return { x: ((i + 0.5) / n) * w + (Math.random() - 0.5) * 30, y: h * (0.16 + ((i * 5) % n) / n * 0.42), vx: (14 + Math.random() * 6) * (0.6 + z), vy: 0, beat: Math.random(), z, rate: 1.05 + Math.random() * 0.2, home: 0 };
   });
+  birds.forEach((b) => { b.home = b.y; });
   return ({ ctx, t, dt, px, py }) => {
     sky(ctx, w, h, w * 0.78, h * 0.42);
     for (const b of birds) {
@@ -159,23 +157,23 @@ const peace = (w: number, h: number): Draw => {
         const dx = b.x - px, dy = b.y - py, d = Math.hypot(dx, dy), R = 120 * k;
         if (d < R) { fright = 1 - d / R; b.vx += (dx / (d || 1)) * 340 * fright * dt; b.vy += (dy / (d || 1)) * 340 * fright * dt; }
       }
-      // drift back to a calm right-hand glide and a comfortable height
-      b.vx += ((16 + 10 * b.z) * k - b.vx) * 0.6 * dt;
-      b.vy += (h * (0.2 + 0.4 * (1 - b.z)) - b.y) * 0.5 * dt - b.vy * 0.8 * dt;
-      b.x += b.vx * dt; b.y += b.vy * dt + Math.sin(t * 1.4 + b.phase) * 4 * dt;
+      // drift back to a calm right-hand glide at the bird's own height
+      b.vx += ((15 + 8 * b.z) * k - b.vx) * 0.6 * dt;
+      b.vy += (b.home - b.y) * 0.5 * dt - b.vy * 0.8 * dt;
+      b.x += b.vx * dt; b.y += b.vy * dt + Math.sin(t * 1.2 + b.home) * 3 * dt;
       if (b.x > w + 40) b.x = -40; if (b.x < -40) b.x = w + 40;
       b.y = Math.max(h * 0.08, Math.min(h * 0.72, b.y));
-      b.beat += ((fright > 0 ? 16 : 7) - b.beat) * 2 * dt;
-      b.phase += b.beat * dt;
+      // 900ms per wingbeat at rest, twice as fast when startled
+      b.beat = (b.beat + dt * b.rate * (1 + fright * 1.2)) % 1;
     }
     for (const b of [...birds].sort((a, c) => a.z - c.z)) {
       ctx.save();
-      ctx.globalAlpha = 0.45 + 0.55 * b.z;
+      ctx.globalAlpha = 0.55 + 0.45 * b.z;
       ctx.translate(b.x, b.y);
-      const heading = Math.max(-0.45, Math.min(0.45, Math.atan2(b.vy, Math.abs(b.vx))));
+      const heading = Math.max(-0.4, Math.min(0.4, Math.atan2(b.vy, Math.abs(b.vx))));
       if (b.vx < 0) ctx.scale(-1, 1);
       ctx.rotate(heading);
-      dove(ctx, (10 + 9 * b.z) * k, Math.sin(b.phase), b.z);
+      dove(ctx, (19 + 15 * b.z) * k, b.beat, b.z);
       ctx.restore();
     }
   };

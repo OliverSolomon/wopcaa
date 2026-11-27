@@ -30,7 +30,7 @@ async function List({ searchParams }: { searchParams: Promise<Record<string, str
       {lead ? (
         <Link href={`/news/${lead.slug}`} className="group mt-12 grid gap-8 md:grid-cols-12 md:items-center">
           <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] bg-mist-deep md:col-span-7">
-            {lead.cover_image ? <Image src={lead.cover_image} alt="" fill priority sizes="60vw" className="object-cover" /> : null}
+            {lead.cover_image ? <Image src={lead.cover_image} alt="" fill priority sizes="(min-width:768px) 60vw, 100vw" quality={90} className="object-cover" /> : null}
           </div>
           <div className="md:col-span-5">
             <h2 className="t-h2 group-hover:text-green">{lead.title}</h2>

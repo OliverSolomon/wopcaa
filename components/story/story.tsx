@@ -15,8 +15,8 @@ type Weather = NonNullable<Scene["weather"]>;
 /**
  * The home page's film. Scroll is the timeline: the section pins, and each
  * scene's photograph pushes in slowly while its line arrives like a subtitle,
- * holds, and gives way to the next. A weather layer (rain, embers, rising
- * seeds) sits over the photographs and changes with the scene.
+ * holds, and gives way to the next. Scenes about the floods can carry rain
+ * over the photograph; nothing else floats over the pictures.
  *
  * With reduced motion the scenes are simply stacked, one per screen, still.
  */
@@ -71,7 +71,7 @@ export function Story({ scenes, ending }: { scenes: Scene[]; ending?: { line: st
                 // Real footage when there is some: muted, looping, inline, with the photo as its poster.
                 <video src={s.video} poster={s.image} autoPlay muted loop playsInline preload={i === 0 ? "auto" : "metadata"} className="absolute inset-0 size-full object-cover motion-reduce:hidden" aria-hidden />
               ) : null}
-              <Image src={s.image} alt="" fill sizes="100vw" priority={i === 0} className={s.video ? "object-cover motion-safe:hidden" : "object-cover"} />
+              <Image src={s.image} alt="" fill sizes="100vw" quality={90} priority={i === 0} className={s.video ? "object-cover motion-safe:hidden" : "object-cover"} />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/45 to-forest/20" />
             <div data-line className="absolute inset-x-0 bottom-0 mx-auto max-w-[1200px] px-5 pb-24 md:px-8 md:pb-28">
@@ -103,14 +103,15 @@ export function Story({ scenes, ending }: { scenes: Scene[]; ending?: { line: st
   );
 }
 
-/* ───────────── Weather: rain for the floods, embers for the drought, seeds for what grows back ───────────── */
+/* ───────────── Weather: rain for the floods. Older scenes saved with embers or seeds now show clear air. ───────────── */
 
 function WeatherLayer({ mode }: { mode: React.RefObject<Weather> }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const c = ref.current!, ctx = c.getContext("2d")!;
-    let w = 0, h = 0, raf = 0, visible = false, last = performance.now(), mix = { rain: 0, embers: 0, seeds: 0 };
+    let w = 0, h = 0, raf = 0, visible = false, last = performance.now();
+    const mix = { rain: 0 };
     const N = 220;
     const ps = Array.from({ length: N }, () => ({ x: Math.random(), y: Math.random(), s: Math.random(), v: 0.5 + Math.random() }));
     const resize = () => {
@@ -121,7 +122,7 @@ function WeatherLayer({ mode }: { mode: React.RefObject<Weather> }) {
       const dt = Math.min(0.05, (now - last) / 1000); last = now;
       const m = mode.current ?? "none";
       // Cross-fade between weathers instead of switching.
-      (["rain", "embers", "seeds"] as const).forEach((k) => { mix[k] += ((m === k ? 1 : 0) - mix[k]) * Math.min(1, dt * 2.5); });
+      (["rain"] as const).forEach((k) => { mix[k] += ((m === k ? 1 : 0) - mix[k]) * Math.min(1, dt * 2.5); });
       ctx.clearRect(0, 0, w, h);
       for (const p of ps) {
         if (mix.rain > 0.01) {
@@ -129,18 +130,7 @@ function WeatherLayer({ mode }: { mode: React.RefObject<Weather> }) {
           ctx.strokeStyle = `rgba(220,236,245,${0.35 * mix.rain * (0.4 + p.s)})`; ctx.lineWidth = 1;
           ctx.beginPath(); ctx.moveTo(p.x * w, p.y * h); ctx.lineTo(p.x * w - 6, p.y * h - 22 - p.s * 14); ctx.stroke();
         }
-        if (mix.embers > 0.01) {
-          p.y -= dt * 0.05 * p.v; p.x += Math.sin(now / 900 + p.s * 10) * dt * 0.02;
-          ctx.fillStyle = `rgba(228,161,150,${0.55 * mix.embers * p.s})`;
-          ctx.beginPath(); ctx.arc(p.x * w, p.y * h, 1 + p.s * 2.2, 0, Math.PI * 2); ctx.fill();
-        }
-        if (mix.seeds > 0.01) {
-          p.y -= dt * 0.035 * p.v; p.x += Math.sin(now / 1400 + p.s * 6) * dt * 0.015;
-          ctx.fillStyle = `rgba(201,165,90,${0.6 * mix.seeds * p.s})`;
-          ctx.beginPath(); ctx.ellipse(p.x * w, p.y * h, 1.4 + p.s * 2, 0.8 + p.s, p.s * 3, 0, Math.PI * 2); ctx.fill();
-        }
         if (p.y > 1.05) { p.y = -0.05; p.x = Math.random(); }
-        if (p.y < -0.05) { p.y = 1.05; p.x = Math.random(); }
         if (p.x > 1.05) p.x = -0.05; if (p.x < -0.05) p.x = 1.05;
       }
       if (visible) raf = requestAnimationFrame(tick);
